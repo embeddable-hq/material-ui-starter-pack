@@ -4,3 +4,4 @@ node_modules
 embeddable-entry-point.jsx
 
 .idea
+logs/
