@@ -42,6 +42,12 @@ export const meta = {
       label: 'Show Legend',
       category: 'Chart settings',
       defaultValue: false
+    },
+    {
+      name: 'innerRadius',
+      type: 'number',
+      label: 'Inner Radius',
+      category: 'Chart settings'
     }
   ],
   events: [

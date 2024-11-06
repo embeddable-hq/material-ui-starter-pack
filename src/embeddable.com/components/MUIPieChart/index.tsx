@@ -10,29 +10,33 @@ type Props = {
   slice: Dimension;
   metric: Measure;
   showLegend: boolean;
+  innerRadius?: number;
   results: DataResponse;
   onItemClick: (event: any) => void;
 };
 
 const mapDataResponseToSeries = (responseData: Array<any>, slice: Dimension, metric: Measure) => {
-  const data = responseData.map(it => ({
+  return responseData.map(it => ({
     value: it[metric.name],
     label: it[slice.name]
   }))
-  return [{ data }]
 }
 
 export default (props: Props) => {
-  const { slice, metric, results, showLegend, onItemClick } = props;
+  const { slice, metric, results, showLegend, onItemClick, innerRadius } = props;
   const { isLoading, data, error } = results;
-
+  console.log("innerRadius:" + innerRadius)
   if (isLoading) {
     return <Loading/>
   }
   if (error) {
     return <Error msg={error}/>;
   }
-  const seriesData = mapDataResponseToSeries(data, slice, metric)
+  const seriesData =
+    [{
+      data: mapDataResponseToSeries(data, slice, metric),
+      innerRadius
+    }]
   return (
     <MUI>
       <PieChart
