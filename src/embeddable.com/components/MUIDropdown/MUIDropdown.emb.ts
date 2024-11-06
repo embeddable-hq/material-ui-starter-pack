@@ -76,7 +76,7 @@ export const meta = {
   ]
 } as const satisfies EmbeddedComponentMeta;
 
-export default defineComponent<Props, typeof meta, { search: string }>(Component, meta, {
+export default defineComponent<Props, typeof meta>(Component, meta, {
   props: (inputs: Inputs<typeof meta>) => {
     if (!inputs.ds)
       return {

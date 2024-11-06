@@ -23,7 +23,10 @@ type Record = { [p: string]: string };
 export default (props: Props) => {
     const [_, setValue] = useState(props.defaultValue);
 
-    const onChange = useCallback((value: string) => {props.onChange(value); setValue(value)}, [setValue, props]);
+    const onChange = useCallback((value: string) => {
+        props.onChange(value);
+        setValue(value)
+    }, [setValue, props]);
 
     const optionList = useMemo(
         () => props.options?.data?.reduce(
@@ -32,21 +35,21 @@ export default (props: Props) => {
                 return memo;
             }, []), [props.options]
     ) as any[];
-
+    const placeHolder = optionList.length === 0 ? 'No results' : props.placeholder;
     return (
         <MUI>
-            {optionList &&
-                (<Autocomplete
-                    disablePortal
-                    autoComplete
-                    disableClearable={props.unclearable}
-                    onChange={(_: any, newValue: string | null) => {
-                        onChange(newValue);
-                    }}
-                    sx={{width: props.minDropdownWidth}}
-                    options={optionList}
-                    renderInput={(params) => <TextField {...params} label={props.placeholder}/>}
-                />)}
+            <Autocomplete
+                disablePortal
+                autoComplete
+                readOnly={optionList.length === 0}
+                disableClearable={props.unclearable}
+                onChange={(_: any, newValue: string | null) => {
+                    onChange(newValue);
+                }}
+                sx={{width: props.minDropdownWidth}}
+                options={optionList || []}
+                renderInput={(params) => <TextField {...params} label={placeHolder}/>}
+            />
         </MUI>
     );
 };
