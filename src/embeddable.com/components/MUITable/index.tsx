@@ -10,7 +10,6 @@ import {
   TablePagination,
   CircularProgress,
   Box,
-  Popper,
 } from "@mui/material";
 import {
   DataResponse,
@@ -44,6 +43,7 @@ export default function MUITable({
   onPageSizeChange,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const paginationRef = useRef<HTMLDivElement>(null);
   const { isLoading, data, error } = results;
   const [maxHeight, setMaxHeight] = useState(1000);
 
@@ -151,6 +151,7 @@ export default function MUITable({
             </Table>
           </TableContainer>
           <TablePagination
+            ref={paginationRef}
             component="div"
             count={-1}
             page={paginationState?.page ?? 0}
@@ -166,7 +167,7 @@ export default function MUITable({
             slotProps={{
               select: {
                 MenuProps: {
-                  container: containerRef.current,
+                  container: paginationRef.current,
                   anchorOrigin: {
                     vertical: "bottom",
                     horizontal: "left",
@@ -179,37 +180,33 @@ export default function MUITable({
                     style: {
                       marginTop: "2px",
                       minWidth: "80px",
+                      position: "absolute",
+                      zIndex: 1300,
                     },
                   },
                   sx: {
-                    "& .MuiMenu-paper": {
-                      position: "absolute !important",
-                      maxHeight: "200px",
-                      boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-                    },
                     "& .MuiMenu-list": {
                       padding: "4px 0",
                     },
                     "& .MuiPopover-root": {
-                      left: "0 !important",
-                      top: "0 !important",
+                      position: "absolute !important",
+                      left: "unset !important",
+                      top: "unset !important",
+                    },
+                    "& .MuiMenu-paper": {
+                      top: "100% !important",
                     },
                   },
-                  PopoverClasses: {
-                    paper: "custom-popover-paper",
-                  },
-                  style: {
-                    left: "100px",
-                    top: "0",
-                  },
+                  disablePortal: true,
+                  keepMounted: false,
                 },
               },
               actions: {
                 nextButton: {
                   disabled:
-                    (isLoading ||
-                      (data?.length ?? 0) < paginationState?.pageSize) ??
-                    pageSize,
+                    isLoading ||
+                    (data?.length ?? 0) <
+                      (paginationState?.pageSize ?? pageSize),
                 },
               },
             }}
