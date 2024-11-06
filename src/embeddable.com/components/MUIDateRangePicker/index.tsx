@@ -18,6 +18,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/node/AdapterDayjs/AdapterDayjs.js";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
+import { set } from "date-fns";
 
 function subtractOneMonth(date) {
   const result = new Date(date);
@@ -32,35 +33,55 @@ function addOneMonth(date) {
 }
 
 export type Props = {
-  defaultPeriod?: TimeRange;
-  defaultGranularity?: Granularity;
-  showGranularity?: boolean;
-  onChange: (v: TimeRange | null) => void;
-  onChangeComparison: (v: TimeRange | null) => void;
-  onChangePeriod: (v: TimeRange | null) => void;
-  onChangeGranularity: (v: Granularity | null) => void;
   value: TimeRange;
+  onChange: (v: TimeRange | null) => void;
 };
 
 export default (props: Props) => {
   const [maxHeight, setMaxHeight] = useState(1000);
 
+  const [newPeriod, setNewPeriod] = useState<TimeRange>({
+    to: undefined,
+    from: undefined,
+  } as TimeRange);
+
   const { value, onChange } = props;
 
-  const handleDateChange = (date, what: "to" | "from") => {
-    // Ensure date is converted to a valid Date instance
+  React.useEffect(() => {
+    setNewPeriod({ to: value?.to, from: value?.from } as TimeRange);
+  }, [value]);
+
+  const [showStart, setShowStart] = useState(false);
+  const [showEnd, setShowEnd] = useState(false);
+
+  const handleStartDateChange = (date: any) => {
     const parsedDate = date instanceof Date ? date : new Date(date);
 
-    onChange(
-      (what === "from"
-        ? { from: parsedDate, to: value?.to || addOneMonth(parsedDate) }
-        : {
-            to: parsedDate,
-            from: value?.from || subtractOneMonth(parsedDate),
-          }) as TimeRange
-    );
+    const newNewPeriod = { ...newPeriod, from: parsedDate } as TimeRange;
+    setNewPeriod(newNewPeriod);
+
+    if (newNewPeriod?.to) {
+      onChange(newNewPeriod);
+    } else {
+      setShowEnd(true);
+    }
+
+    setShowStart(false);
   };
-  console.log(value);
+
+  const handleEndDateChange = (date: any) => {
+    const parsedDate = date instanceof Date ? date : new Date(date);
+    const newNewPeriod = { ...newPeriod, to: parsedDate } as TimeRange;
+
+    if (newNewPeriod?.from) {
+      onChange(newNewPeriod);
+    } else {
+      setShowStart(true);
+    }
+
+    setShowEnd(false);
+  };
+
   return (
     <MUI>
       <ResizeListener onResize={(w, h) => setMaxHeight(h)} debounce={300}>
@@ -74,14 +95,20 @@ export default (props: Props) => {
             }}
           >
             <DatePicker
+              open={showStart}
+              onOpen={() => setShowStart(true)}
               label="Start date"
               value={value?.from ? dayjs(value?.from) : null}
-              onChange={(newValue) => handleDateChange(newValue, "from")}
+              onChange={handleStartDateChange}
             />
             <DatePicker
+              open={showEnd}
+              onOpen={() =>
+                newPeriod?.from ? setShowEnd(true) : setShowStart(true)
+              }
               label="End date"
               value={value?.to ? dayjs(value?.to) : null}
-              onChange={(newValue) => handleDateChange(newValue, "to")}
+              onChange={handleEndDateChange}
             />
           </div>
         </LocalizationProvider>
