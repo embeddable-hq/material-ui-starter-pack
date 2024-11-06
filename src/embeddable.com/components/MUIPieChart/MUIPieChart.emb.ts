@@ -43,6 +43,26 @@ export const meta = {
       category: 'Chart settings',
       defaultValue: false
     }
+  ],
+  events: [
+    {
+      name: "onItemClick",
+      label: "On Item click",
+      properties: [
+        {
+          name: "value",
+          type: "number"
+        },
+        {
+          name: "formattedValue",
+          type: "string"
+        },
+        {
+          name: "label",
+          type: "string"
+        }
+      ]
+    }
   ]
 } as const satisfies EmbeddedComponentMeta;
 
@@ -56,5 +76,8 @@ export default defineComponent(Component, meta, {
         measures: [inputs.metric]
       })
     };
+  },
+  events: {
+    onItemClick: (event) => event
   }
 });
