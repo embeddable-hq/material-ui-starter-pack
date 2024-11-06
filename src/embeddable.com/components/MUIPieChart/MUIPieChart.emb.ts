@@ -35,6 +35,13 @@ export const meta = {
         dataset: 'ds'
       },
       category: 'Chart data'
+    },
+    {
+      name: 'showLegend',
+      type: 'boolean',
+      label: 'Show Legend',
+      category: 'Chart settings',
+      defaultValue: false
     }
   ]
 } as const satisfies EmbeddedComponentMeta;

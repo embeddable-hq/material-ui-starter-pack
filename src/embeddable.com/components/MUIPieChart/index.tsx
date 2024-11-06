@@ -9,6 +9,7 @@ type Props = {
   ds: Dataset;
   slice: Dimension;
   metric: Measure;
+  showLegend: boolean;
   results: DataResponse;
 };
 
@@ -21,7 +22,7 @@ const mapDataResponseToSeries = (responseData: Array<any>, slice: Dimension, met
 }
 
 export default (props: Props) => {
-  const { slice, metric, results } = props;
+  const { slice, metric, results, showLegend } = props;
   const { isLoading, data, error } = results;
 
   if (isLoading) {
@@ -35,8 +36,7 @@ export default (props: Props) => {
     <MUI>
       <PieChart
         series={seriesData}
-        width={400}
-        height={200}
+        slotProps={{ legend: { hidden: !showLegend } }}
       />
     </MUI>
   )
