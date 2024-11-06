@@ -39,12 +39,13 @@ export default (props: Props) => {
 
     return (
         <MUI>
-            <Autocomplete
-                disablePortal
-                sx={{width: 300}}
-                options={optionList}
-                renderInput={(params) => <TextField {...params} label="Movie"/>}
-            />
+            {optionList &&
+                (<Autocomplete
+                    disablePortal
+                    sx={{width: 300}}
+                    options={optionList}
+                    renderInput={(params) => <TextField {...params} label={props.placeholder}/>}
+                />)}
         </MUI>
     );
 };
