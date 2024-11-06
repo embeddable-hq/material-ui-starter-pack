@@ -18,6 +18,7 @@
     "@emotion/styled": "^11.13.0",
     "@fontsource/roboto": "^5.1.0",
     "@mui/material": "^6.1.1",
+    "@mui/x-charts": "^7.22.1",
     "chart.js": "^4.4.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
@@ -25,10 +26,10 @@
     "use-debounce": "^10.0.3"
   },
   "devDependencies": {
-    "@embeddable.com/core": "2.6.5",
-    "@embeddable.com/react": "2.7.3",
-    "@embeddable.com/sdk-core": "3.5.2",
-    "@embeddable.com/sdk-react": "3.5.0",
+    "@embeddable.com/core": "2.6.8",
+    "@embeddable.com/react": "2.7.5",
+    "@embeddable.com/sdk-core": "3.9.6",
+    "@embeddable.com/sdk-react": "3.8.2",
     "cross-env": "^7.0.3"
   }
 }
