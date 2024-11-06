@@ -51,14 +51,6 @@ export const meta = {
         {
           name: "value",
           type: "number"
-        },
-        {
-          name: "formattedValue",
-          type: "string"
-        },
-        {
-          name: "label",
-          type: "string"
         }
       ]
     }
@@ -72,6 +64,8 @@ export default defineComponent(Component, meta, {
     };
   },
   events: {
-    onChange: (event) => event
+    onChange: (event) => ({
+      value: event.target.value
+    })
   }
 });

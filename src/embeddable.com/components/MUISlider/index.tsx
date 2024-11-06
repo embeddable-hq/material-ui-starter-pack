@@ -18,12 +18,12 @@ export default (props: Props) => {
   return (
     <MUI>
       <Slider
-        defaultValue={value}
+        value={value}
         step={step}
         min={min}
         max={max}
         size={"medium"}
-        onChange={console.log}
+        onChange={onChange}
       />
     </MUI>
   )
