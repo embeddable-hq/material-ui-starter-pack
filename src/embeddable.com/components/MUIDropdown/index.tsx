@@ -21,7 +21,7 @@ export type Props = {
 type Record = { [p: string]: string };
 
 export default (props: Props) => {
-    const [value, setValue] = useState(props.defaultValue);
+    const [_, setValue] = useState(props.defaultValue);
 
     const onChange = useCallback((value: string) => {props.onChange(value); setValue(value)}, [setValue, props]);
 
@@ -38,8 +38,8 @@ export default (props: Props) => {
             {optionList &&
                 (<Autocomplete
                     disablePortal
+                    autoComplete
                     disableClearable={props.unclearable}
-                    inputValue={value || (props.defaultValue || "")}
                     onChange={(_: any, newValue: string | null) => {
                         onChange(newValue);
                     }}
