@@ -56,21 +56,24 @@ export const meta = {
 
 type State = {
   page: number;
+  pageSize: number;
 };
 
 export default defineComponent<Props, typeof meta, State>(Component, meta, {
   props: (inputs: Inputs<typeof meta>, [state]) => {
-    const { ds, cols, pageSize = 10 } = inputs;
+    const { ds, cols } = inputs;
     const currentPage = state?.page || 0;
+    const currentPageSize = state?.pageSize || inputs.pageSize || 10;
 
     return {
       ...inputs,
+      pageSize: currentPageSize,
       results: loadData({
         from: ds,
         dimensions: cols.filter((c) => isDimension(c)),
         measures: cols.filter((c) => isMeasure(c)),
-        limit: pageSize,
-        offset: pageSize * currentPage,
+        limit: currentPageSize,
+        offset: currentPageSize * currentPage,
       }),
     };
   },

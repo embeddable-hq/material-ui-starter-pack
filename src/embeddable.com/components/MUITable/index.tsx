@@ -10,6 +10,7 @@ import {
   TablePagination,
   CircularProgress,
   Box,
+  Popper,
 } from "@mui/material";
 import {
   DataResponse,
@@ -27,10 +28,12 @@ export type Props = {
   results: DataResponse;
   pageSize: number;
   pageSizeOptions: number[];
+  onPageSizeChange?: (newPageSize: number) => void;
 };
 
 type PaginationState = {
   page: number;
+  pageSize: number;
 };
 
 export default function MUITable({
@@ -38,6 +41,7 @@ export default function MUITable({
   results,
   pageSize,
   pageSizeOptions,
+  onPageSizeChange,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { isLoading, data, error } = results;
@@ -45,6 +49,7 @@ export default function MUITable({
 
   const [paginationState, setPaginationState] = useEmbeddableState({
     page: 0,
+    pageSize: pageSize,
   }) as [
     PaginationState,
     (f: (state: PaginationState) => PaginationState) => void,
@@ -64,7 +69,12 @@ export default function MUITable({
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const newPageSize = parseInt(event.target.value, 10);
-    setPaginationState((state) => ({ ...state, page: 0 }));
+    setPaginationState((state) => ({
+      ...state,
+      page: 0,
+      pageSize: newPageSize,
+    }));
+    onPageSizeChange?.(newPageSize);
   };
 
   return (
@@ -145,23 +155,61 @@ export default function MUITable({
             count={-1}
             page={paginationState?.page ?? 0}
             onPageChange={handleChangePage}
-            rowsPerPage={pageSize}
+            rowsPerPage={paginationState?.pageSize ?? pageSize}
             onRowsPerPageChange={handleChangeRowsPerPage}
             rowsPerPageOptions={pageSizeOptions}
             sx={{
               flexShrink: 0,
               borderTop: "1px solid rgba(224, 224, 224, 1)",
+              position: "relative",
             }}
             slotProps={{
               select: {
                 MenuProps: {
                   container: containerRef.current,
-                  style: { position: "absolute" },
+                  anchorOrigin: {
+                    vertical: "bottom",
+                    horizontal: "left",
+                  },
+                  transformOrigin: {
+                    vertical: "top",
+                    horizontal: "left",
+                  },
+                  PaperProps: {
+                    style: {
+                      marginTop: "2px",
+                      minWidth: "80px",
+                    },
+                  },
+                  sx: {
+                    "& .MuiMenu-paper": {
+                      position: "absolute !important",
+                      maxHeight: "200px",
+                      boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+                    },
+                    "& .MuiMenu-list": {
+                      padding: "4px 0",
+                    },
+                    "& .MuiPopover-root": {
+                      left: "0 !important",
+                      top: "0 !important",
+                    },
+                  },
+                  PopoverClasses: {
+                    paper: "custom-popover-paper",
+                  },
+                  style: {
+                    left: "100px",
+                    top: "0",
+                  },
                 },
               },
               actions: {
                 nextButton: {
-                  disabled: isLoading || (data?.length ?? 0) < pageSize,
+                  disabled:
+                    (isLoading ||
+                      (data?.length ?? 0) < paginationState?.pageSize) ??
+                    pageSize,
                 },
               },
             }}
