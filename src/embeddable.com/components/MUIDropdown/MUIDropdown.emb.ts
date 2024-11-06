@@ -30,9 +30,16 @@ export const meta = {
     {
       name: 'clearable',
       type: 'boolean',
-      label: 'clearable',
+      label: 'Clearable',
       category: 'Settings',
       defaultValue: true
+    },
+    {
+      name: 'multiValue',
+      type: 'boolean',
+      label: 'MultiValue',
+      category: 'Settings',
+      defaultValue: false
     },
     {
       name: 'defaultValue',
@@ -70,6 +77,7 @@ export const meta = {
     {
       name: 'dropdown choice',
       type: 'string',
+      array: true,
       defaultValue: Value.noFilter(),
       inputs: ['defaultValue'],
       events: [{ name: 'onChange', property: 'value' }]
@@ -96,8 +104,9 @@ export default defineComponent<Props, typeof meta>(Component, meta, {
   },
   events: {
     onChange: (value) => {
+      const newValue = value || [];
       return {
-        value: value || Value.noFilter()
+        value: newValue.length === 0 ? Value.noFilter() : newValue
       };
     }
   }

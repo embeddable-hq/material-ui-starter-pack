@@ -9,6 +9,7 @@ import {Autocomplete, TextField} from "@mui/material";
 export type Props = {
     options: DataResponse;
     clearable: boolean;
+    multiValue: boolean
     onChange: (v: string) => void;
     minDropdownWidth?: number;
     property?: { name: string; title: string; nativeType: string; __type__: string };
@@ -39,6 +40,7 @@ export default (props: Props) => {
     return (
         <MUI>
             <Autocomplete
+                multiple={props.multiValue === true}
                 disablePortal
                 autoComplete
                 readOnly={optionList.length === 0}
