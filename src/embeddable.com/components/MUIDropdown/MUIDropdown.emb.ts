@@ -77,7 +77,7 @@ export const meta = {
 } as const satisfies EmbeddedComponentMeta;
 
 export default defineComponent<Props, typeof meta, { search: string }>(Component, meta, {
-  props: (inputs: Inputs<typeof meta>, [embState]) => {
+  props: (inputs: Inputs<typeof meta>) => {
     if (!inputs.ds)
       return {
         ...inputs,
@@ -89,17 +89,7 @@ export default defineComponent<Props, typeof meta, { search: string }>(Component
       options: loadData({
         from: inputs.ds,
         dimensions: inputs.property ? [inputs.property] : [],
-        limit: inputs.limit || 1000,
-        filters:
-          embState?.search && inputs.property
-            ? [
-                {
-                  operator: 'contains',
-                  property: inputs.property,
-                  value: embState?.search
-                }
-              ]
-            : undefined
+        limit: inputs.limit || 1000
       })
     };
   },

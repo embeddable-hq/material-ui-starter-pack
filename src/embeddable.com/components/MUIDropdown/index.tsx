@@ -1,25 +1,14 @@
 import {DataResponse} from '@embeddable.com/core';
-import {useEmbeddableState} from '@embeddable.com/react';
 import React, {
-    ReactNode,
-    useCallback,
-    useEffect,
-    useLayoutEffect,
     useMemo,
-    useRef,
-    useState
 } from 'react';
 import MUI from '../MUI'
 import {Autocomplete, TextField} from "@mui/material";
 
 export type Props = {
-    icon?: ReactNode;
-    className?: string;
     options: DataResponse;
     unclearable?: boolean;
-    inputClassName?: string;
     onChange: (v: string) => void;
-    searchProperty?: string;
     minDropdownWidth?: number;
     property?: { name: string; title: string; nativeType: string; __type__: string };
     title?: string;
@@ -27,6 +16,8 @@ export type Props = {
     placeholder?: string;
     ds?: { embeddableId: string; datasetId: string; variableValues: Record };
 };
+
+type Record = { [p: string]: string };
 
 export default (props: Props) => {
     const optionList = useMemo(
@@ -42,7 +33,9 @@ export default (props: Props) => {
             {optionList &&
                 (<Autocomplete
                     disablePortal
-                    sx={{width: 300}}
+                    disableClearable={props.unclearable}
+                    defaultValue={optionList.find((o) => o.label === props.defaultValue)}
+                    sx={{width: props.minDropdownWidth}}
                     options={optionList}
                     renderInput={(params) => <TextField {...params} label={props.placeholder}/>}
                 />)}
