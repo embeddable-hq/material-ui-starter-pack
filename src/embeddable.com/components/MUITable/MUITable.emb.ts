@@ -1,45 +1,77 @@
-import { EmbeddedComponentMeta, defineComponent } from '@embeddable.com/react';
-
-import Component from './index';
-import { Inputs } from '@embeddable.com/react';
-import { isDimension, isMeasure, loadData } from '@embeddable.com/core';
+import {
+  EmbeddedComponentMeta,
+  Inputs,
+  defineComponent,
+} from "@embeddable.com/react";
+import {
+  OrderBy,
+  isDimension,
+  isMeasure,
+  loadData,
+} from "@embeddable.com/core";
+import Component from "./index";
+import type { Props } from "./index";
 
 export const meta = {
-  name: 'MUITable',
-  label: 'Table',
+  name: "MUITable",
+  label: "Table",
   defaultHeight: 100,
   defaultWidth: 400,
-  category: 'Material UI',
-  classNames: ['overflow-scroll'], //defined in global.css
+  category: "Material UI",
+  classNames: ["overflow-scroll"],
   inputs: [
     {
-      name: 'ds',
-      type: 'dataset',
-      label: 'Dataset to display',
-      category: 'Configure chart'
+      name: "ds",
+      type: "dataset",
+      label: "Dataset to display",
+      category: "Configure chart",
     },
     {
-      name: 'cols',
-      type: 'dimensionOrMeasure',
+      name: "cols",
+      type: "dimensionOrMeasure",
       array: true,
-      label: 'Columns',
+      label: "Columns",
       config: {
-        dataset: 'ds'
+        dataset: "ds",
       },
-      category: 'Configure chart'
+      category: "Configure chart",
     },
-  ]
+    {
+      name: "pageSize",
+      type: "number",
+      label: "Rows per page",
+      defaultValue: 10,
+      category: "Pagination",
+    },
+    {
+      name: "pageSizeOptions",
+      type: "number",
+      array: true,
+      label: "Page size options",
+      defaultValue: [5, 10, 25, 50],
+      category: "Pagination",
+    },
+  ],
 } as const satisfies EmbeddedComponentMeta;
 
-export default defineComponent(Component, meta, {
-  props: (inputs: Inputs<typeof meta>) => {
+type State = {
+  page: number;
+};
+
+export default defineComponent<Props, typeof meta, State>(Component, meta, {
+  props: (inputs: Inputs<typeof meta>, [state]) => {
+    const { ds, cols, pageSize = 10 } = inputs;
+    const currentPage = state?.page || 0;
+
     return {
       ...inputs,
       results: loadData({
-        from: inputs.ds,
-        dimensions: inputs.cols.filter(c => isDimension(c)),
-        measures: inputs.cols.filter(c => isMeasure(c))
-      })
+        from: ds,
+        dimensions: cols.filter((c) => isDimension(c)),
+        measures: cols.filter((c) => isMeasure(c)),
+        limit: pageSize,
+        offset: pageSize * currentPage,
+      }),
     };
-  }
+  },
 });
