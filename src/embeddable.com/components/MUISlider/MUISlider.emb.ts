@@ -64,8 +64,6 @@ export default defineComponent(Component, meta, {
     };
   },
   events: {
-    onChange: (event) => ({
-      value: event.target.value
-    })
+    onChange: (value) => ({ value })
   }
 });

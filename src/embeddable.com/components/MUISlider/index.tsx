@@ -11,10 +11,26 @@ type Props = {
   max: number
 };
 
+let timeout: number | null = null;
 
 export default (props: Props) => {
-  const { value, onChange, size, step, min, max } = props;
-  // TODO: 1) debounce; 2)
+  const { onChange, size, step, min, max } = props;
+  const [value, setValue] = React.useState(props.value);
+
+  React.useEffect(() => {
+    setValue(props.value);
+  }, [props.value]);
+
+  const handleChange = (e) => {
+    setValue(e.target.value);
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = window.setTimeout(() => {
+      onChange(e.target.value);
+    }, 100);
+  }
+
   return (
     <MUI>
       <Slider
@@ -23,7 +39,7 @@ export default (props: Props) => {
         min={min}
         max={max}
         size={"medium"}
-        onChange={onChange}
+        onChange={handleChange}
       />
     </MUI>
   )
