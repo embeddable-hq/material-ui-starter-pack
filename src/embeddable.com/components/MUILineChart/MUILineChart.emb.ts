@@ -31,7 +31,7 @@ export const meta = {
     {
       name: 'yAxis',
       type: 'measure',
-      // array: true,
+      array: true,
       label: 'Y-Axis',
       config: {
         dataset: 'ds'
@@ -51,7 +51,7 @@ export default defineComponent(Component, meta, {
           dimension: inputs.xAxis.name,
           granularity: 'week'
         }],
-        measures: [inputs.yAxis]
+        measures: inputs.yAxis
       })
     };
   }

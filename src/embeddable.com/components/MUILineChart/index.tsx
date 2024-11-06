@@ -5,7 +5,6 @@ import {
   DataResponse,
   Dataset,
   Dimension,
-  DimensionOrMeasure,
   Measure,
 } from "@embeddable.com/core";
 import Loading from "../util/Loading";
@@ -15,7 +14,7 @@ import ResizeListener from "../util/ResizeListener";
 type Props = {
   ds: Dataset;
   xAxis: Dimension;
-  yAxis: Measure;
+  yAxis: Measure[];
   results: DataResponse;
 };
 
@@ -30,24 +29,15 @@ export default (props: Props) => {
   if (error) {
     return <Error msg={error} />;
   }
-  console.log(xAxis)
-  console.log(yAxis)
-  console.log(data)
-  const customize = {
-    height: 300,
-    width: 500,
-    margin: { top: 5 },
-  };
 
   const formatData = data?.map(d => {
-    return {
+    const val =  {
       ...d,
-      [yAxis.name]: parseInt(d[yAxis.name]),
       [xAxis.name]: new Date(d[xAxis.name])
     }
+    yAxis.forEach(y => val[y.name] = parseInt(val[y.name]))
+    return val
   })
-
-  console.log('for', formatData)
 
   return (
     <MUI>
@@ -55,19 +45,21 @@ export default (props: Props) => {
         <LineChart
           xAxis={[
             {
+              label: xAxis.title,
               dataKey: xAxis.name,
-              valueFormatter: (value) => {
-                console.log('val', new Date(value))
-                return new Date(value).toLocaleDateString()              }
-            },
+              valueFormatter: (value) => new Date(value).toLocaleDateString()
+            }
           ]}
-          series={[
-            {
-              dataKey: yAxis.name,
-            },
-          ]}
+          series={
+            yAxis.map(y => (
+              {
+                dataKey: y.name, 
+                label: y.title,
+                valueFormatter: (value) => value ? value?.toString() : ''
+              })
+            )
+          }
           dataset={formatData}
-          {...customize}
         />
       </ResizeListener>
     </MUI>
