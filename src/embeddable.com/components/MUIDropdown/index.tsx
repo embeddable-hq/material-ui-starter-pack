@@ -1,5 +1,6 @@
 import {DataResponse} from '@embeddable.com/core';
 import React, {
+    useCallback,
     useMemo, useState,
 } from 'react';
 import MUI from '../MUI'
@@ -22,6 +23,8 @@ type Record = { [p: string]: string };
 export default (props: Props) => {
     const [value, setValue] = useState(props.defaultValue);
 
+    const onChange = useCallback((value: string) => {props.onChange(value); setValue(value)}, [setValue, props]);
+
     const optionList = useMemo(
         () => props.options?.data?.reduce(
             (memo, o, i: number) => {
@@ -38,8 +41,7 @@ export default (props: Props) => {
                     disableClearable={props.unclearable}
                     inputValue={value || (props.defaultValue || "")}
                     onChange={(_: any, newValue: string | null) => {
-                        setValue(newValue);
-                        console.log(newValue);
+                        onChange(newValue);
                     }}
                     sx={{width: props.minDropdownWidth}}
                     options={optionList}
