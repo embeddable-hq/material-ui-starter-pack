@@ -28,10 +28,11 @@ export const meta = {
       category: 'Dropdown values'
     },
     {
-      name: 'title',
-      type: 'string',
-      label: 'Title',
-      category: 'Settings'
+      name: 'clearable',
+      type: 'boolean',
+      label: 'clearable',
+      category: 'Settings',
+      defaultValue: true
     },
     {
       name: 'defaultValue',

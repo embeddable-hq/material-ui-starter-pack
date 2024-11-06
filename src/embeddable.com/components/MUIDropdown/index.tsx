@@ -8,7 +8,7 @@ import {Autocomplete, TextField} from "@mui/material";
 
 export type Props = {
     options: DataResponse;
-    unclearable?: boolean;
+    clearable: boolean;
     onChange: (v: string) => void;
     minDropdownWidth?: number;
     property?: { name: string; title: string; nativeType: string; __type__: string };
@@ -34,7 +34,7 @@ export default (props: Props) => {
                 memo.push(o[props.property.name]);
                 return memo;
             }, []), [props.options]
-    ) as any[];
+    ) as any[] || [];
     const placeHolder = optionList.length === 0 ? 'No results' : props.placeholder;
     return (
         <MUI>
@@ -42,12 +42,12 @@ export default (props: Props) => {
                 disablePortal
                 autoComplete
                 readOnly={optionList.length === 0}
-                disableClearable={props.unclearable}
+                disableClearable={props.clearable === false}
                 onChange={(_: any, newValue: string | null) => {
                     onChange(newValue);
                 }}
                 sx={{width: props.minDropdownWidth}}
-                options={optionList || []}
+                options={optionList}
                 renderInput={(params) => <TextField {...params} label={placeHolder}/>}
             />
         </MUI>
