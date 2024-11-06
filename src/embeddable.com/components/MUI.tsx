@@ -1,7 +1,7 @@
-import createCache from '@emotion/cache';
-import { CacheProvider, EmotionCache, Theme, ThemeProvider } from '@emotion/react';
-import { createTheme } from '@mui/material/node/styles/index.js';
-import React, { ReactNode, useLayoutEffect, useRef, useState } from 'react';
+import createCache from "@emotion/cache";
+import { CacheProvider, EmotionCache, Theme } from "@emotion/react";
+import { ThemeProvider, createTheme } from "@mui/material";
+import React, { ReactNode, useLayoutEffect, useRef, useState } from "react";
 
 export default (props: { children: ReactNode }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -14,9 +14,9 @@ export default (props: { children: ReactNode }) => {
     const container = ref.current.parentElement as Element;
 
     const cache = createCache({
-      key: 'css',
+      key: "css",
       prepend: false,
-      container
+      container,
     });
 
     setCache(cache);
@@ -25,20 +25,20 @@ export default (props: { children: ReactNode }) => {
       components: {
         MuiPopover: {
           defaultProps: {
-            container
-          }
+            container,
+          },
         },
         MuiPopper: {
           defaultProps: {
-            container
-          }
+            container,
+          },
         },
         MuiModal: {
           defaultProps: {
-            container
-          }
-        }
-      }
+            container,
+          },
+        },
+      },
     });
 
     setTheme(theme);
