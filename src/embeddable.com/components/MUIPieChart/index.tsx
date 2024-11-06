@@ -1,7 +1,9 @@
 import { DataResponse, Dataset, Dimension, DimensionOrMeasure, Measure } from "@embeddable.com/core";
 import React, { useState } from "react";
+import { PieChart } from '@mui/x-charts';
 import Loading from "../util/Loading";
 import Error from "../util/Error";
+import MUI from "../MUI";
 
 type Props = {
   ds: Dataset;
@@ -9,6 +11,14 @@ type Props = {
   metric: Measure;
   results: DataResponse;
 };
+
+const mapDataResponseToSeries = (responseData: Array<any>, slice: Dimension, metric: Measure) => {
+  const data = responseData.map(it => ({
+    value: it[metric.name],
+    label: it[slice.name]
+  }))
+  return [{ data }]
+}
 
 export default (props: Props) => {
   const { slice, metric, results } = props;
@@ -20,10 +30,14 @@ export default (props: Props) => {
   if (error) {
     return <Error msg={error}/>;
   }
-
+  const seriesData = mapDataResponseToSeries(data, slice, metric)
   return (
-    <div>
-      {data?.length}
-    </div>
+    <MUI>
+      <PieChart
+        series={seriesData}
+        width={400}
+        height={200}
+      />
+    </MUI>
   )
 }
