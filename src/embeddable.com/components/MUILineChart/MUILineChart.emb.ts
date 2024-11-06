@@ -13,6 +13,12 @@ export const meta = {
   classNames: ['overflow-scroll'], //defined in global.css
   inputs: [
     {
+      name: 'title',
+      type: 'string',
+      label: 'Title',
+      category: 'Settings',
+    },
+    {
       name: 'ds',
       type: 'dataset',
       label: 'Dataset to display',

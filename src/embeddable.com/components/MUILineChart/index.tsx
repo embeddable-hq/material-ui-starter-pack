@@ -12,6 +12,7 @@ import Error from "../util/Error";
 import ResizeListener from "../util/ResizeListener";
 
 type Props = {
+  title: string;
   ds: Dataset;
   xAxis: Dimension;
   yAxis: Measure[];
@@ -19,7 +20,7 @@ type Props = {
 };
 
 export default (props: Props) => {
-  const { xAxis, yAxis, results } = props;
+  const { xAxis, yAxis, results, title } = props;
   const { isLoading, data, error } = results;
   const [maxHeight, setMaxHeight] = useState(1000);
 
@@ -42,6 +43,7 @@ export default (props: Props) => {
   return (
     <MUI>
       <ResizeListener onResize={(w, h) => setMaxHeight(h)} debounce={300}>
+        <h1 style={{position: "absolute", top: 0, right: 20}}>{title}</h1>
         <LineChart
           xAxis={[
             {
