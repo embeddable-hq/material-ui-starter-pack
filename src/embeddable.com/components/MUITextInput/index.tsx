@@ -2,13 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { OverridableStringUnion } from '@mui/types';
 import MUI from '../MUI';
 import {
+  Paper,
   TextField,
   TextFieldPropsSizeOverrides,
   TextFieldVariants,
 } from '@mui/material';
 import ResizeListener from '../util/ResizeListener';
+import { MUITheme } from '../types';
 
 interface Props {
+  theme: MUITheme;
   fullWidth?: boolean;
   helperText?: string;
   multiline?: boolean;
@@ -51,20 +54,22 @@ const Component: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <MUI>
+    <MUI theme={props.theme}>
       <ResizeListener onResize={handleRowSize} debounce={300}>
-        <TextField
-          fullWidth={fullWidth}
-          helperText={helperText}
-          label={title}
-          multiline={multiline}
-          onChange={handleChange}
-          ref={ref}
-          rows={rowsVal}
-          size={size}
-          variant={variant || undefined}
-          value={value}
-        />
+        <Paper style={{ height: 'inherit', width: 'inherit' }}>
+          <TextField
+            fullWidth={fullWidth}
+            helperText={helperText}
+            label={title}
+            multiline={multiline}
+            onChange={handleChange}
+            ref={ref}
+            rows={rowsVal}
+            size={size}
+            variant={variant || undefined}
+            value={value}
+          />
+        </Paper>
       </ResizeListener>
     </MUI>
   );

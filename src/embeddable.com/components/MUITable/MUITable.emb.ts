@@ -46,13 +46,14 @@ type State = {
 };
 
 export default defineComponent<Props, typeof meta, State>(Component, meta, {
-  props: (inputs: Inputs<typeof meta>, [state]) => {
+  props: (inputs: Inputs<typeof meta>, [state], clientContext) => {
     const { ds, cols } = inputs;
     const currentPage = state?.page || 0;
     const currentPageSize = state?.pageSize || inputs.pageSize || 10;
 
     return {
       ...inputs,
+      ...clientContext,
       pageSize: currentPageSize,
       results: loadData({
         from: inputs.ds,

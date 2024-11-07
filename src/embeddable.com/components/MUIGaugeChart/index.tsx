@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
 import { DataResponse, DimensionOrMeasure } from '@embeddable.com/core';
 
-import { Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { Gauge, gaugeClasses } from '@mui/x-charts';
 
 import Error from '../util/Error';
 import Loading from '../util/Loading';
 import MUI from '../MUI';
 import ResizeListener from '../util/ResizeListener';
+import { MUITheme } from '../types';
 
 interface Props {
+  theme: MUITheme;
   cols?: DimensionOrMeasure[];
   description?: string;
   endAngle?: number;
@@ -130,33 +132,35 @@ const Component: React.FC<Props> = (props: Props) => {
   }
 
   return (
-    <MUI>
+    <MUI theme={props.theme}>
       <ResizeListener onResize={handleChartResize} debounce={300}>
-        {title && <Typography variant="h6">{title}</Typography>}
-        {description && (
-          <Typography variant="body1" gutterBottom>
-            {description}
-          </Typography>
-        )}
-        <Gauge
-          desc={description}
-          endAngle={endAngle}
-          height={gaugeHeight}
-          innerRadius={innerRadius}
-          outerRadius={outerRadius}
-          startAngle={startAngle}
-          sx={{
-            [`& .${gaugeClasses.valueText}`]: {
-              fontSize: { fontSize },
-            },
-          }}
-          text={text}
-          title={title}
-          value={val}
-          valueMax={maxValue}
-          valueMin={minValue}
-          width={gaugeWidth}
-        />
+        <Paper style={{ height: 'inherit', width: 'inherit' }}>
+          {title && <Typography variant="h6">{title}</Typography>}
+          {description && (
+            <Typography variant="body1" gutterBottom>
+              {description}
+            </Typography>
+          )}
+          <Gauge
+            desc={description}
+            endAngle={endAngle}
+            height={gaugeHeight}
+            innerRadius={innerRadius}
+            outerRadius={outerRadius}
+            startAngle={startAngle}
+            sx={{
+              [`& .${gaugeClasses.valueText}`]: {
+                fontSize: { fontSize },
+              },
+            }}
+            text={text}
+            title={title}
+            value={val}
+            valueMax={maxValue}
+            valueMin={minValue}
+            width={gaugeWidth}
+          />
+        </Paper>
       </ResizeListener>
     </MUI>
   );

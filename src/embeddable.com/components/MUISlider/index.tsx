@@ -1,10 +1,12 @@
-import React from "react";
-import MUI from "../MUI";
-import { Slider } from "@mui/material";
-import {OverridableStringUnion} from "@mui/types";
-import {SliderPropsSizeOverrides} from "@mui/material/Slider/Slider";
+import React from 'react';
+import MUI from '../MUI';
+import { Paper, Slider } from '@mui/material';
+import { OverridableStringUnion } from '@mui/types';
+import { SliderPropsSizeOverrides } from '@mui/material/Slider/Slider';
+import { MUITheme } from '../types';
 
 type Props = {
+  theme: MUITheme;
   onChange: (event: any) => void;
   value: number;
   step: number;
@@ -19,7 +21,8 @@ type Props = {
 let timeout: number | null = null;
 
 export default (props: Props) => {
-  const { onChange, step, min, max, enabled, marks, valueLabelDisplay, size } = props;
+  const { onChange, step, min, max, enabled, marks, valueLabelDisplay, size } =
+    props;
   const [value, setValue] = React.useState(props.value);
 
   React.useEffect(() => {
@@ -34,21 +37,23 @@ export default (props: Props) => {
     timeout = window.setTimeout(() => {
       onChange(e.target.value);
     }, 100);
-  }
+  };
 
   return (
-    <MUI>
-      <Slider
-        disabled={!enabled}
-        marks={marks}
-        valueLabelDisplay={valueLabelDisplay ? "auto" : "off"}
-        value={value}
-        step={step}
-        min={min}
-        max={max}
-        size={size}
-        onChange={handleChange}
-      />
+    <MUI theme={props.theme}>
+      <Paper style={{ height: 'inherit', width: 'inherit' }}>
+        <Slider
+          disabled={!enabled}
+          marks={marks}
+          valueLabelDisplay={valueLabelDisplay ? 'auto' : 'off'}
+          value={value}
+          step={step}
+          min={min}
+          max={max}
+          size={size}
+          onChange={handleChange}
+        />
+      </Paper>
     </MUI>
-  )
-}
+  );
+};
