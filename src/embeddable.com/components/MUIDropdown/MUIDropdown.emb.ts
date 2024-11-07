@@ -68,7 +68,8 @@ export const meta = {
       properties: [
         {
           name: 'value',
-          type: 'string'
+          type: 'string',
+          array: true
         }
       ]
     }
