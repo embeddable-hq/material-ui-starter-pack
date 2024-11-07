@@ -25,6 +25,13 @@ export const meta = {
       category: 'Text',
     },
     {
+      name: 'fontSize',
+      type: 'number',
+      label: 'Font Size',
+      category: 'Text',
+      defaultValue: 24,
+    },
+    {
       name: 'ds',
       type: 'dataset',
       label: 'Dataset to display',
@@ -40,15 +47,6 @@ export const meta = {
       },
       category: 'Configure chart',
     },
-    /*
-    {
-      name: 'value',
-      type: 'number',
-      label: 'Value',
-      category: 'Values',
-      defaultValue: 100,
-    },
-    */
     {
       name: 'minValue',
       type: 'number',
@@ -71,18 +69,6 @@ export const meta = {
       defaultValue: false,
     },
     {
-      name: 'width',
-      type: 'number',
-      label: 'Width',
-      category: 'Settings',
-    },
-    {
-      name: 'height',
-      type: 'number',
-      label: 'Height',
-      category: 'Settings',
-    },
-    {
       name: 'startAngle',
       type: 'number',
       label: 'Start Angle',
@@ -95,18 +81,6 @@ export const meta = {
       label: 'End Angle',
       category: 'Settings',
       defaultValue: 360,
-    },
-    {
-      name: 'innerRadius',
-      type: 'number',
-      label: 'Inner Radius',
-      category: 'Settings',
-    },
-    {
-      name: 'outerRadius',
-      type: 'number',
-      label: 'Outer Radius',
-      category: 'Settings',
     },
   ],
   /*

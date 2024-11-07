@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { DataResponse, DimensionOrMeasure } from '@embeddable.com/core';
 
 import { Typography } from '@mui/material';
-import { Gauge } from '@mui/x-charts';
+import { Gauge, gaugeClasses } from '@mui/x-charts';
 
 import Error from '../util/Error';
 import Loading from '../util/Loading';
@@ -13,17 +13,13 @@ interface Props {
   cols?: DimensionOrMeasure[];
   description?: string;
   endAngle?: number;
-  height?: number;
-  innerRadius?: number;
+  fontSize?: number;
   maxValue?: number;
   minValue?: number;
-  outerRadius?: number;
   results: DataResponse;
   showTotal?: boolean;
   startAngle?: number;
   title?: string;
-  // value?: number;
-  width?: number;
 }
 
 const Component: React.FC<Props> = (props: Props) => {
@@ -31,56 +27,96 @@ const Component: React.FC<Props> = (props: Props) => {
     cols,
     description,
     endAngle,
-    height,
-    innerRadius,
+    fontSize,
     maxValue,
     minValue,
-    outerRadius,
     results,
     showTotal,
     startAngle,
     title,
-    // value,
-    width,
   } = props;
 
+  // Data from the query
   const { data, error, isLoading } = results;
+
+  // Calculated values
   const val = parseInt(data?.[0]?.[cols?.[0].name || ''], 10);
   const text = showTotal ? `${val} / ${maxValue}` : `${val}`;
 
-  const [calcWidth, setCalcWidth] = React.useState<number>(width || 0);
-  const [calcHeight, setCalcHeight] = React.useState<number>(height || 0);
-  const [calcInnerRadius, setCalcInnerRadius] = React.useState<number>(
-    innerRadius || 0,
-  );
-  const [calcOuterRadius, setCalcOuterRadius] = React.useState<number>(
-    outerRadius || 0,
-  );
+  // Component state
+  const [chartWidth, setChartWidth] = React.useState<number>(0);
+  const [chartHeight, setChartHeight] = React.useState<number>(0);
+  const [gaugeWidth, setGaugeWidth] = React.useState<number>(0);
+  const [gaugeHeight, setGaugeHeight] = React.useState<number>(0);
+  const [innerRadius, setInnerRadius] = React.useState<number>(0);
   const [isCalculating, setIsCalculating] = React.useState<boolean>(true);
+  const [outerRadius, setOuterRadius] = React.useState<number>(0);
 
+  // Runs whenever the chart is resized to make the gauge fit as well as possible
   const handleChartResize = (w: number, h: number) => {
-    setCalcWidth(w);
-    setCalcHeight(h - 80);
-    setCalcInnerRadius(Math.min(w, h) / 4);
-    setCalcOuterRadius(Math.min(w, h) / 3);
+    // Store these values for use in the useEffect below
+    setChartWidth(w);
+    setChartHeight(h);
+
+    // Default to full chart if no values are set
+    if (startAngle === undefined || endAngle === undefined) {
+      setGaugeWidth(w);
+      setGaugeHeight(h);
+      setInnerRadius(Math.min(w, h) / 4);
+      setOuterRadius(Math.min(w, h) / 3);
+      return;
+    }
+
+    // Adjust spacing if the chart is an arch or half-circle
+    let isArch = false;
+    if (
+      (startAngle >= 40 && startAngle <= 140) ||
+      (startAngle <= -40 && startAngle >= -140)
+    ) {
+      isArch = true;
+    }
+
+    // Handle title and description height adjustments
+    let heightMod = 0;
+    if (title) {
+      heightMod += 30;
+    }
+    if (description) {
+      heightMod += 30;
+    }
+
+    // Calculate the gauge size based on the chart shape
+    if (isArch) {
+      setGaugeWidth(w);
+      setGaugeHeight(h - heightMod);
+      setInnerRadius(Math.floor(w / 2.5));
+      setOuterRadius(Math.floor(w / 2.1));
+    } else {
+      setGaugeWidth(w);
+      setGaugeHeight(h - heightMod);
+      setInnerRadius(Math.min(w, h) / 4);
+      setOuterRadius(Math.min(w, h) / 3);
+    }
   };
 
+  // Don't render the chart until we have values from the initial resize calculation
   useEffect(() => {
     if (
-      calcWidth > 0 &&
-      calcHeight > 0 &&
-      calcInnerRadius > 0 &&
-      calcOuterRadius > 0
+      gaugeWidth > 0 &&
+      gaugeHeight > 0 &&
+      innerRadius > 0 &&
+      outerRadius > 0
     ) {
       setIsCalculating(false);
     }
-  }, [
-    calcWidth,
-    calcHeight,
-    calcInnerRadius,
-    calcOuterRadius,
-    setIsCalculating,
-  ]);
+  }, [gaugeWidth, gaugeHeight, innerRadius, outerRadius, setIsCalculating]);
+
+  // Run a resize if the inputs change but the chart size doesn't
+  useEffect(() => {
+    if (!isCalculating) {
+      handleChartResize(chartWidth, chartHeight);
+    }
+  }, [props]);
 
   if (isLoading || (isCalculating && !error)) {
     return (
@@ -96,21 +132,30 @@ const Component: React.FC<Props> = (props: Props) => {
   return (
     <MUI>
       <ResizeListener onResize={handleChartResize} debounce={300}>
-        <Typography variant="h6">{title}</Typography>
-        <Typography variant="body1" gutterBottom>
-          {description}
-        </Typography>
+        {title && <Typography variant="h6">{title}</Typography>}
+        {description && (
+          <Typography variant="body1" gutterBottom>
+            {description}
+          </Typography>
+        )}
         <Gauge
+          desc={description}
           endAngle={endAngle}
-          height={calcHeight}
-          innerRadius={calcInnerRadius}
-          outerRadius={calcOuterRadius}
+          height={gaugeHeight}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius}
           startAngle={startAngle}
+          sx={{
+            [`& .${gaugeClasses.valueText}`]: {
+              fontSize: { fontSize },
+            },
+          }}
+          text={text}
+          title={title}
           value={val}
           valueMax={maxValue}
           valueMin={minValue}
-          text={text}
-          width={calcWidth}
+          width={gaugeWidth}
         />
       </ResizeListener>
     </MUI>
