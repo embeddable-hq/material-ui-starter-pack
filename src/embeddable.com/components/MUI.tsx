@@ -2,8 +2,9 @@ import createCache from '@emotion/cache';
 import { CacheProvider, EmotionCache, Theme } from '@emotion/react';
 import { ThemeProvider, createTheme } from '@mui/material';
 import React, { ReactNode, useLayoutEffect, useRef, useState } from 'react';
+import { MUITheme } from './types';
 
-export default (props: { children: ReactNode }) => {
+export default (props: { children: ReactNode; theme?: MUITheme }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [cache, setCache] = useState<EmotionCache>();
   const [theme, setTheme] = useState<Theme>();
@@ -21,6 +22,9 @@ export default (props: { children: ReactNode }) => {
     setCache(cache);
 
     const theme = createTheme({
+      palette: {
+        mode: props.theme,
+      },
       components: {
         MuiPopover: {
           defaultProps: {
@@ -41,7 +45,7 @@ export default (props: { children: ReactNode }) => {
     });
 
     setTheme(theme);
-  }, []);
+  }, [props.theme]);
 
   if (!cache || !theme) return <div ref={ref} />;
   return (
