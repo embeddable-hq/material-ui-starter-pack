@@ -38,8 +38,6 @@ export type Props = {
 };
 
 export default (props: Props) => {
-  const [maxHeight, setMaxHeight] = useState(1000);
-
   const [newPeriod, setNewPeriod] = useState<TimeRange>({
     to: undefined,
     from: undefined,
@@ -84,35 +82,33 @@ export default (props: Props) => {
 
   return (
     <MUI>
-      <ResizeListener onResize={(w, h) => setMaxHeight(h)} debounce={300}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <div
-            style={{
-              display: "flex",
-              gap: "10px",
-              justifyContent: "center",
-              alignContent: "center",
-            }}
-          >
-            <DatePicker
-              open={showStart}
-              onOpen={() => setShowStart(true)}
-              label="Start date"
-              value={value?.from ? dayjs(value?.from) : null}
-              onChange={handleStartDateChange}
-            />
-            <DatePicker
-              open={showEnd}
-              onOpen={() =>
-                newPeriod?.from ? setShowEnd(true) : setShowStart(true)
-              }
-              label="End date"
-              value={value?.to ? dayjs(value?.to) : null}
-              onChange={handleEndDateChange}
-            />
-          </div>
-        </LocalizationProvider>
-      </ResizeListener>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            justifyContent: "center",
+            alignContent: "center",
+          }}
+        >
+          <DatePicker
+            open={showStart}
+            onOpen={() => setShowStart(true)}
+            label="Start date"
+            value={value?.from ? dayjs(value?.from) : null}
+            onChange={handleStartDateChange}
+          />
+          <DatePicker
+            open={showEnd}
+            onOpen={() =>
+              newPeriod?.from ? setShowEnd(true) : setShowStart(true)
+            }
+            label="End date"
+            value={value?.to ? dayjs(value?.to) : null}
+            onChange={handleEndDateChange}
+          />
+        </div>
+      </LocalizationProvider>
     </MUI>
   );
 };

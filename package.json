@@ -20,7 +20,6 @@
     "@mui/material": "^6.1.1",
     "@mui/x-charts": "^7.22.1",
     "@mui/x-date-pickers": "^7.22.1",
-    "@mui/x-date-pickers-pro": "^7.22.1",
     "chart.js": "^4.4.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",

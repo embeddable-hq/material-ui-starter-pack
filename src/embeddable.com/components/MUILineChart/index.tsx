@@ -43,7 +43,6 @@ export default (props: Props) => {
   const [allowCut, setAllowCut] = useState(false);
 
   const { isLoading, data, error } = results;
-  const [maxHeight, setMaxHeight] = useState(1000);
 
   if (isLoading) {
     return <Loading />;
@@ -102,66 +101,64 @@ export default (props: Props) => {
 
   return (
     <MUI>
-      <ResizeListener onResize={(w, h) => setMaxHeight(h)} debounce={300}>
-        <h1 style={{ position: "absolute", top: -20, left: 50 }}>{title}</h1>
+      <h1 style={{ position: "absolute", top: -20, left: 50 }}>{title}</h1>
 
-        {showCut && (
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 50,
-              color: "black",
-              background: "white",
-              border: "5px dashed black",
-              padding: 10,
-              borderRadius: 5,
-              zIndex: 1000,
-              display: "flex",
-              gap: 10,
-            }}
-          >
-            {allowCut && (
-              <Alert severity="info">
-                {allowCut
-                  ? cut === "beforeAxis"
-                    ? "Click to remove previous data"
-                    : "Click to remove future data"
-                  : null}
-              </Alert>
-            )}
-            {availablePeriod && (
-              <Button variant="outlined" onClick={handleReset}>
-                Reset
-              </Button>
-            )}
-            <Button
-              variant="contained"
-              onClick={() => setAllowCut((prev) => !prev)}
-            >
-              {allowCut ? "Disable" : "Enable"} cut
+      {showCut && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 50,
+            color: "black",
+            background: "white",
+            border: "5px dashed black",
+            padding: 10,
+            borderRadius: 5,
+            zIndex: 1000,
+            display: "flex",
+            gap: 10,
+          }}
+        >
+          {allowCut && (
+            <Alert severity="info">
+              {allowCut
+                ? cut === "beforeAxis"
+                  ? "Click to remove previous data"
+                  : "Click to remove future data"
+                : null}
+            </Alert>
+          )}
+          {availablePeriod && (
+            <Button variant="outlined" onClick={handleReset}>
+              Reset
             </Button>
-          </div>
-        )}
-        <LineChart
-          onAxisClick={(e, param) => allowCut && handleSetInterval(param)}
-          xAxis={[
-            {
-              label: xAxis.title,
-              dataKey: xAxis.name,
-              valueFormatter: (value) => new Date(value).toLocaleDateString(),
-            },
-          ]}
-          series={yAxis.map((y) => ({
-            dataKey: y.name,
-            label: y.title,
-            valueFormatter: (value) => (value ? value?.toString() : ""),
-            area,
-          }))}
-          dataset={formatData}
-          grid={{ vertical: grid, horizontal: grid }}
-        />
-      </ResizeListener>
+          )}
+          <Button
+            variant="contained"
+            onClick={() => setAllowCut((prev) => !prev)}
+          >
+            {allowCut ? "Disable" : "Enable"} cut
+          </Button>
+        </div>
+      )}
+      <LineChart
+        onAxisClick={(e, param) => allowCut && handleSetInterval(param)}
+        xAxis={[
+          {
+            label: xAxis.title,
+            dataKey: xAxis.name,
+            valueFormatter: (value) => new Date(value).toLocaleDateString(),
+          },
+        ]}
+        series={yAxis.map((y) => ({
+          dataKey: y.name,
+          label: y.title,
+          valueFormatter: (value) => (value ? value?.toString() : ""),
+          area,
+        }))}
+        dataset={formatData}
+        grid={{ vertical: grid, horizontal: grid }}
+      />
     </MUI>
   );
 };
