@@ -63,20 +63,35 @@ export const meta = {
       defaultValue: "week",
       category: "Variables to configure",
     },
+    {
+      name: "value",
+      type: "timeRange",
+      label: "Value",
+      category: "Settings",
+    },
   ],
-  // events: [
-  //   {
-  //     name: "onPeriodChange",
-  //     label: "Change Period",
-  //     properties: [
-  //       {
-  //         name: "value",
-  //         type: "timeRange",
-  //         label: "value",
-  //       },
-  //     ],
-  //   },
-  // ],
+  events: [
+    {
+      name: "onClick",
+      label: "Click on point",
+      properties: [
+        {
+          name: "value",
+          type: "timeRange",
+          label: "value",
+        },
+      ],
+    },
+  ],
+  variables: [
+    {
+      name: "line chart point value",
+      type: "timeRange",
+      inputs: ["value"],
+      defaultValue: Value.noFilter(),
+      events: [{ name: "onClick", property: "value" }],
+    },
+  ],
 } as const satisfies EmbeddedComponentMeta;
 
 export default defineComponent(Component, meta, {
@@ -94,6 +109,13 @@ export default defineComponent(Component, meta, {
         measures: inputs.yAxis,
       }),
     };
+  },
+  events: {
+    onClick: (v) => {
+      if (!v) return { value: Value.noFilter() };
+      console.log("onClick2", { value: v });
+      return { value: v };
+    },
   },
   // events: {
   //   onPeriodChange: (v) => {

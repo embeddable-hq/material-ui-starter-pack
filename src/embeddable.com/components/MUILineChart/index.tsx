@@ -20,21 +20,18 @@ type Props = {
   xAxis: Dimension;
   yAxis: Measure[];
   results: DataResponse;
-  onPeriodChange: (period: { from: Date; to: Date }) => void;
+  value: TimeRange;
+  onClick: (period: { from: Date; to: Date } | null) => void;
 };
 
 export default (props: Props) => {
-  const { xAxis, yAxis, results, title, area, grid, onPeriodChange } = props;
+  const { xAxis, yAxis, results, title, area, grid, onClick, value } = props;
 
   const [cut, setCut] = useState<"beforeAxis" | "afterAxis">("beforeAxis");
   const [allowCut, setAllowCut] = useState(false);
 
   const { isLoading, data, error } = results;
   const [maxHeight, setMaxHeight] = useState(1000);
-  const [interval, setInterval] = useState<TimeRange>({
-    from: undefined,
-    to: undefined,
-  } as TimeRange);
 
   if (isLoading) {
     return <Loading />;
@@ -54,34 +51,40 @@ export default (props: Props) => {
     })
     .filter(
       (x) =>
-        (!interval?.from || x[xAxis.name] >= interval.from) &&
-        (!interval?.to || x[xAxis.name] <= interval.to)
+        (!value?.from || x[xAxis.name] >= value.from) &&
+        (!value?.to || x[xAxis.name] <= value.to)
     );
 
+  const handleReset = () => {
+    onClick(null);
+  };
   const handleSetInterval = (param: any) => {
     const { axisValue } = param;
 
     if (cut === "beforeAxis") {
       console.log("start");
       const lastDate =
-        interval?.to ||
+        value?.to ||
         (results?.data
           ? new Date(results.data[results.data?.length - 1][xAxis.name])
           : null);
 
-      setInterval({ from: axisValue, to: lastDate } as any);
+      setPointValue({ from: axisValue, to: lastDate } as any);
     }
 
     if (cut === "afterAxis") {
       console.log("end");
       const firstDate =
-        interval?.from ||
+        value?.from ||
         (results?.data ? new Date(results.data[0][xAxis.name]) : null);
 
-      setInterval({ from: firstDate, to: axisValue } as any);
+      setPointValue({ from: firstDate, to: axisValue } as any);
     }
 
     setCut((prev) => (prev === "beforeAxis" ? "afterAxis" : "beforeAxis"));
+  };
+  const setPointValue = (value: any) => {
+    onClick(value);
   };
 
   return (
@@ -104,6 +107,7 @@ export default (props: Props) => {
           <button onClick={() => setAllowCut((prev) => !prev)}>
             {allowCut ? "Disable" : "Enable"} cut
           </button>
+          {value && <button onClick={handleReset}>Reset</button>}
           {allowCut
             ? cut === "beforeAxis"
               ? "click axis to remove what is before <-"
