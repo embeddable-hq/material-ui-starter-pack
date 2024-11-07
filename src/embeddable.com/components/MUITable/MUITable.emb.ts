@@ -5,37 +5,36 @@ import {
   Inputs,
 } from '@embeddable.com/react';
 
-import Component from './index';
-
+import Component, { Props } from './index';
 
 export const meta = {
-  name: "MUITable",
-  label: "Table",
+  name: 'MUITable',
+  label: 'Table',
   defaultHeight: 100,
   defaultWidth: 400,
-  category: "Material UI",
-  classNames: ["overflow-scroll"],
+  category: 'Material UI',
+  classNames: ['overflow-scroll'],
   inputs: [
     {
-      name: "ds",
-      type: "dataset",
-      label: "Dataset to display",
-      category: "Configure chart",
+      name: 'ds',
+      type: 'dataset',
+      label: 'Dataset to display',
+      category: 'Configure chart',
     },
     {
-      name: "cols",
-      type: "dimensionOrMeasure",
+      name: 'cols',
+      type: 'dimensionOrMeasure',
       array: true,
-      label: "Columns",
+      label: 'Columns',
       config: {
-        dataset: "ds",
+        dataset: 'ds',
       },
-      category: "Configure chart",
+      category: 'Configure chart',
     },
     {
-      name: "pageSize",
-      type: "number",
-      label: "Rows per page",
+      name: 'pageSize',
+      type: 'number',
+      label: 'Rows per page',
       defaultValue: 10,
     },
   ],

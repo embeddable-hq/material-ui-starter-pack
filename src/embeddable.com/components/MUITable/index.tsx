@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -11,20 +11,14 @@ import {
   CircularProgress,
   Box,
   TextField,
-} from "@mui/material";
+} from '@mui/material';
 import {
   DataResponse,
   Dataset,
   DimensionOrMeasure,
-} from "@embeddable.com/core";
-import { useEmbeddableState } from "@embeddable.com/react";
-import MUI from "../MUI";
-import Error from "../util/Error";
-import ResizeListener from "../util/ResizeListener";
-} from '@mui/material';
-
+} from '@embeddable.com/core';
+import { useEmbeddableState } from '@embeddable.com/react';
 import Error from '../util/Error';
-import Loading from '../util/Loading';
 import MUI from '../MUI';
 import ResizeListener from '../util/ResizeListener';
 
@@ -105,9 +99,9 @@ export default function MUITable({
           ref={containerRef}
           position="relative"
           sx={{
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
           {isLoading && (
@@ -131,7 +125,7 @@ export default function MUITable({
               flexGrow: 1,
               maxHeight: `calc(${maxHeight}px - 52px)`,
               opacity: isLoading ? 0.3 : 1,
-              transition: "opacity 0.2s",
+              transition: 'opacity 0.2s',
             }}
             component={Paper}
           >
@@ -147,11 +141,11 @@ export default function MUITable({
                     <TableCell
                       key={column}
                       sx={{
-                        backgroundColor: "#f5f5f5",
+                        backgroundColor: '#f5f5f5',
                         fontWeight: 600,
-                        borderBottom: "2px solid rgba(224, 224, 224, 1)",
-                        "&:hover": {
-                          backgroundColor: "#eeeeee",
+                        borderBottom: '2px solid rgba(224, 224, 224, 1)',
+                        '&:hover': {
+                          backgroundColor: '#eeeeee',
                         },
                       }}
                     >
@@ -173,14 +167,14 @@ export default function MUITable({
           </TableContainer>
           <Box
             sx={{
-              display: "flex",
-              alignItems: "center",
-              padding: "0 16px",
-              borderTop: "1px solid rgba(224, 224, 224, 1)",
-              minHeight: "52px",
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 16px',
+              borderTop: '1px solid rgba(224, 224, 224, 1)',
+              minHeight: '52px',
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <TextField
                 type="number"
                 size="small"
@@ -192,23 +186,23 @@ export default function MUITable({
                   }
                 }}
                 onKeyDown={(e) => {
-                  if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                     e.preventDefault();
-                    const delta = e.key === "ArrowUp" ? 10 : -10;
+                    const delta = e.key === 'ArrowUp' ? 10 : -10;
                     const newValue = Math.max(10, inputPageSize + delta);
                     setInputPageSize(newValue);
                   }
                 }}
                 sx={{
-                  width: "50px",
+                  width: '50px',
                   marginRight: 1,
-                  "& input": {
-                    textAlign: "right",
-                    padding: "2px 4px",
-                    fontSize: "0.875rem",
+                  '& input': {
+                    textAlign: 'right',
+                    padding: '2px 4px',
+                    fontSize: '0.875rem',
                   },
-                  "& .MuiOutlinedInput-root": {
-                    height: "28px",
+                  '& .MuiOutlinedInput-root': {
+                    height: '28px',
                   },
                 }}
                 slotProps={{
@@ -220,11 +214,11 @@ export default function MUITable({
                   },
                 }}
               />
-              <span style={{ fontSize: "0.875rem" }}>Rows per page</span>
+              <span style={{ fontSize: '0.875rem' }}>Rows per page</span>
             </Box>
 
             <Box
-              sx={{ marginLeft: "auto", display: "flex", alignItems: "center" }}
+              sx={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}
             >
               <TablePagination
                 ref={paginationRef}
@@ -237,11 +231,11 @@ export default function MUITable({
                 labelRowsPerPage=""
                 sx={{
                   flexShrink: 0,
-                  position: "relative",
-                  ".MuiTablePagination-spacer": { display: "none" },
-                  ".MuiTablePagination-selectLabel": { display: "none" },
-                  ".MuiTablePagination-select": { display: "none" },
-                  ".MuiTablePagination-selectIcon": { display: "none" },
+                  position: 'relative',
+                  '.MuiTablePagination-spacer': { display: 'none' },
+                  '.MuiTablePagination-selectLabel': { display: 'none' },
+                  '.MuiTablePagination-select': { display: 'none' },
+                  '.MuiTablePagination-selectIcon': { display: 'none' },
                 }}
                 slotProps={{
                   actions: {
