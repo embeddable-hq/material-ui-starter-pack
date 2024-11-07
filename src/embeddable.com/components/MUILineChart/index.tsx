@@ -16,7 +16,7 @@ type Props = {
   ds: Dataset;
   xAxis: Dimension;
   yAxis: Measure[];
-  results: DataResponse;
+  results: DataResponse;``
 };
 
 export default (props: Props) => {

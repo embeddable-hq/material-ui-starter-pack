@@ -44,6 +44,13 @@ export const meta = {
       },
       category: 'Configure chart'
     },
+    {
+      name: 'granularity',
+      type: 'granularity',
+      label: 'Granularity',
+      defaultValue: 'week',
+      category: 'Variables to configure',
+    }
   ]
 } as const satisfies EmbeddedComponentMeta;
 
@@ -55,7 +62,7 @@ export default defineComponent(Component, meta, {
         from: inputs.ds,
         timeDimensions: [{
           dimension: inputs.xAxis.name,
-          granularity: 'week'
+          granularity: inputs.granularity
         }],
         measures: inputs.yAxis
       })
