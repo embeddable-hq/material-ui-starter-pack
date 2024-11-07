@@ -13,24 +13,6 @@ export const meta = {
   classNames: ["overflow-scroll"], //defined in global.css
   inputs: [
     {
-      name: "title",
-      type: "string",
-      label: "Title",
-      category: "Settings",
-    },
-    {
-      name: "area",
-      type: "boolean",
-      label: "Area",
-      category: "Settings",
-    },
-    {
-      name: "grid",
-      type: "boolean",
-      label: "Grid",
-      category: "Settings",
-    },
-    {
       name: "ds",
       type: "dataset",
       label: "Dataset to display",
@@ -61,19 +43,43 @@ export const meta = {
       type: "granularity",
       label: "Granularity",
       defaultValue: "week",
-      category: "Variables to configure",
+      category: "Configure chart",
     },
     {
-      name: "value",
+      name: "title",
+      type: "string",
+      label: "Title",
+      category: "Settings",
+    },
+    {
+      name: "area",
+      type: "boolean",
+      label: "Area",
+      category: "Settings",
+    },
+    {
+      name: "grid",
+      type: "boolean",
+      label: "Grid",
+      category: "Settings",
+    },
+    {
+      name: "availablePeriod",
       type: "timeRange",
-      label: "Value",
+      label: "Available Period",
+      category: "Settings",
+    },
+    {
+      name: "showCut",
+      type: "boolean",
+      label: "Show cut",
       category: "Settings",
     },
   ],
   events: [
     {
-      name: "onClick",
-      label: "Click on point",
+      name: "onXAxisClick",
+      label: "On X-Axis Click",
       properties: [
         {
           name: "value",
@@ -87,9 +93,9 @@ export const meta = {
     {
       name: "line chart point value",
       type: "timeRange",
-      inputs: ["value"],
+      inputs: ["availablePeriod"],
       defaultValue: Value.noFilter(),
-      events: [{ name: "onClick", property: "value" }],
+      events: [{ name: "onXAxisClick", property: "value" }],
     },
   ],
 } as const satisfies EmbeddedComponentMeta;
@@ -102,7 +108,7 @@ export default defineComponent(Component, meta, {
         from: inputs.ds,
         timeDimensions: [
           {
-            dimension: inputs.xAxis.name,
+            dimension: inputs.xAxis?.name || '',
             granularity: inputs.granularity,
           },
         ],
@@ -111,7 +117,7 @@ export default defineComponent(Component, meta, {
     };
   },
   events: {
-    onClick: (v) => {
+    onXAxisClick: (v) => {
       if (!v) return { value: Value.noFilter() };
       return { value: v };
     },
