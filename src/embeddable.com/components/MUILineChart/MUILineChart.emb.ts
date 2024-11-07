@@ -113,7 +113,6 @@ export default defineComponent(Component, meta, {
   events: {
     onClick: (v) => {
       if (!v) return { value: Value.noFilter() };
-      console.log("onClick2", { value: v });
       return { value: v };
     },
   }

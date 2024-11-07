@@ -62,7 +62,6 @@ export default (props: Props) => {
     const { axisValue } = param;
 
     if (cut === "beforeAxis") {
-      console.log("start");
       const lastDate =
         value?.to ||
         (results?.data
@@ -73,7 +72,6 @@ export default (props: Props) => {
     }
 
     if (cut === "afterAxis") {
-      console.log("end");
       const firstDate =
         value?.from ||
         (results?.data ? new Date(results.data[0][xAxis.name]) : null);
