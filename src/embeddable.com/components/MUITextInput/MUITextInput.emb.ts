@@ -65,14 +65,6 @@ export const meta = {
       category: 'MUI Props',
       defaultValue: false,
     },
-    {
-      name: 'rows',
-      type: 'number',
-      label: 'Multiline Rows',
-      description: 'Number of rows for multiline text input',
-      category: 'MUI Props',
-      defaultValue: 3,
-    },
   ],
   events: [
     {

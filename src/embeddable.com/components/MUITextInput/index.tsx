@@ -13,7 +13,6 @@ interface Props {
   helperText?: string;
   multiline?: boolean;
   onChange: (v: string) => void;
-  rows?: number;
   size?:
     | OverridableStringUnion<'small' | 'medium', TextFieldPropsSizeOverrides>
     | undefined;
@@ -25,11 +24,10 @@ interface Props {
 let timeout: number | null = null;
 
 const Component: React.FC<Props> = (props: Props) => {
-  const { fullWidth, helperText, multiline, rows, size, title, variant } =
-    props;
+  const { fullWidth, helperText, multiline, size, title, variant } = props;
   const ref = useRef<HTMLInputElement | null>(null);
   const [value, setValue] = useState<string>(props.value || '');
-  const [rowsVal, setRowsVal] = useState<number>(rows || 1);
+  const [rowsVal, setRowsVal] = useState<number>(1);
 
   useEffect(() => {
     setValue(props.value || '');
