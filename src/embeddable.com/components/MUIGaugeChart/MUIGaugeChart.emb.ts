@@ -1,10 +1,11 @@
+import { isDimension, isMeasure, loadData } from '@embeddable.com/core';
 import {
   defineComponent,
   EmbeddedComponentMeta,
   Inputs,
 } from '@embeddable.com/react';
+
 import Component from './index';
-import { isDimension, isMeasure, loadData, Value } from '@embeddable.com/core';
 
 export const meta = {
   name: 'MUIGaugeChart',
