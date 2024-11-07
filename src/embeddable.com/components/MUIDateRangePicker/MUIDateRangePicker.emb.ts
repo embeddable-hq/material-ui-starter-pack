@@ -63,14 +63,7 @@ export default defineComponent(Component, meta, {
   },
   events: {
     onChange: (v) => {
-      console.log("onChange", v);
       if (!v) return { value: Value.noFilter() };
-
-      // const value = timeRangeToUTC({
-      //   ...v,
-      //   from: startOfDay(v.from),
-      //   to: endOfDay(v.to),
-      // });
 
       return { value: v };
     },

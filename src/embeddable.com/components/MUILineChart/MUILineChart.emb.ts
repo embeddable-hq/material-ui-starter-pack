@@ -2,7 +2,7 @@ import { EmbeddedComponentMeta, defineComponent } from "@embeddable.com/react";
 
 import Component from "./index";
 import { Inputs } from "@embeddable.com/react";
-import { isDimension, isMeasure, loadData } from "@embeddable.com/core";
+import { isDimension, isMeasure, loadData, Value } from "@embeddable.com/core";
 
 export const meta = {
   name: "MUILineChart",
@@ -22,6 +22,12 @@ export const meta = {
       name: "area",
       type: "boolean",
       label: "Area",
+      category: "Settings",
+    },
+    {
+      name: "grid",
+      type: "boolean",
+      label: "Grid",
       category: "Settings",
     },
     {
@@ -51,13 +57,26 @@ export const meta = {
       category: "Configure chart",
     },
     {
-      name: 'granularity',
-      type: 'granularity',
-      label: 'Granularity',
-      defaultValue: 'week',
-      category: 'Variables to configure',
-    }
-  ]
+      name: "granularity",
+      type: "granularity",
+      label: "Granularity",
+      defaultValue: "week",
+      category: "Variables to configure",
+    },
+  ],
+  // events: [
+  //   {
+  //     name: "onPeriodChange",
+  //     label: "Change Period",
+  //     properties: [
+  //       {
+  //         name: "value",
+  //         type: "timeRange",
+  //         label: "value",
+  //       },
+  //     ],
+  //   },
+  // ],
 } as const satisfies EmbeddedComponentMeta;
 
 export default defineComponent(Component, meta, {
@@ -66,12 +85,19 @@ export default defineComponent(Component, meta, {
       ...inputs,
       results: loadData({
         from: inputs.ds,
-        timeDimensions: [{
-          dimension: inputs.xAxis.name,
-          granularity: inputs.granularity
-        }],
-        measures: inputs.yAxis
-      })
+        timeDimensions: [
+          {
+            dimension: inputs.xAxis.name,
+            granularity: inputs.granularity,
+          },
+        ],
+        measures: inputs.yAxis,
+      }),
     };
   },
+  // events: {
+  //   onPeriodChange: (v) => {
+  //     return { value: v };
+  //   },
+  // },
 });
