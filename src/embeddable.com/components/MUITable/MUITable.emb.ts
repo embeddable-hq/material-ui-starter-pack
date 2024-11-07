@@ -1,16 +1,12 @@
+import { isDimension, isMeasure, loadData } from '@embeddable.com/core';
 import {
+  defineComponent,
   EmbeddedComponentMeta,
   Inputs,
-  defineComponent,
-} from "@embeddable.com/react";
-import {
-  OrderBy,
-  isDimension,
-  isMeasure,
-  loadData,
-} from "@embeddable.com/core";
-import Component from "./index";
-import type { Props } from "./index";
+} from '@embeddable.com/react';
+
+import Component from './index';
+
 
 export const meta = {
   name: "MUITable",
@@ -41,7 +37,6 @@ export const meta = {
       type: "number",
       label: "Rows per page",
       defaultValue: 10,
-      category: "Pagination",
     },
   ],
 } as const satisfies EmbeddedComponentMeta;
@@ -61,9 +56,9 @@ export default defineComponent<Props, typeof meta, State>(Component, meta, {
       ...inputs,
       pageSize: currentPageSize,
       results: loadData({
-        from: ds,
-        dimensions: cols.filter((c) => isDimension(c)),
-        measures: cols.filter((c) => isMeasure(c)),
+        from: inputs.ds,
+        dimensions: inputs.cols.filter((c) => isDimension(c)),
+        measures: inputs.cols.filter((c) => isMeasure(c)),
         limit: currentPageSize,
         offset: currentPageSize * currentPage,
       }),

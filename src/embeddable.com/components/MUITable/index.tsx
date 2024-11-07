@@ -21,6 +21,12 @@ import { useEmbeddableState } from "@embeddable.com/react";
 import MUI from "../MUI";
 import Error from "../util/Error";
 import ResizeListener from "../util/ResizeListener";
+} from '@mui/material';
+
+import Error from '../util/Error';
+import Loading from '../util/Loading';
+import MUI from '../MUI';
+import ResizeListener from '../util/ResizeListener';
 
 export type Props = {
   ds: Dataset;
