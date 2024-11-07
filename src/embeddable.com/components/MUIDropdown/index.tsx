@@ -21,6 +21,13 @@ export type Props = {
 
 type Record = { [p: string]: string };
 
+const getOptionLabel = (option: any) => {
+    if (Array.isArray(option)) {
+        return option.length === 0 ? "" : option[0];
+    }
+    return option;
+};
+
 export default (props: Props) => {
     const [_, setValue] = useState(props.defaultValue);
 
@@ -31,7 +38,7 @@ export default (props: Props) => {
 
     const optionList = useMemo(
         () => props.options?.data?.reduce(
-            (memo, o, i: number) => {
+            (memo, o) => {
                 memo.push(o[props.property.name]);
                 return memo;
             }, []), [props.options]
@@ -45,10 +52,12 @@ export default (props: Props) => {
                 autoComplete
                 readOnly={optionList.length === 0}
                 disableClearable={props.clearable === false}
+                value={props.defaultValue || []}
                 onChange={(_: any, newValue: string | null) => {
                     onChange(newValue);
                 }}
                 sx={{width: props.minDropdownWidth}}
+                getOptionLabel={getOptionLabel}
                 options={optionList}
                 renderInput={(params) => <TextField {...params} label={placeHolder}/>}
             />
