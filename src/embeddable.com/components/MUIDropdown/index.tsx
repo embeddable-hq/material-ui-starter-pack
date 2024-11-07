@@ -21,6 +21,13 @@ export type Props = {
 
 type Record = { [p: string]: string };
 
+const getOptionLabel = (option: any) => {
+    if (Array.isArray(option)) {
+        return option.length === 0 ? "" : option[0];
+    }
+    return option;
+};
+
 export default (props: Props) => {
     const [_, setValue] = useState(props.defaultValue);
 
@@ -31,7 +38,7 @@ export default (props: Props) => {
 
     const optionList = useMemo(
         () => props.options?.data?.reduce(
-            (memo, o, i: number) => {
+            (memo, o) => {
                 memo.push(o[props.property.name]);
                 return memo;
             }, []), [props.options]
@@ -50,7 +57,7 @@ export default (props: Props) => {
                     onChange(newValue);
                 }}
                 sx={{width: props.minDropdownWidth}}
-                getOptionLabel={(option) => Array.isArray(option) ? option[0] : option}
+                getOptionLabel={getOptionLabel}
                 options={optionList}
                 renderInput={(params) => <TextField {...params} label={placeHolder}/>}
             />

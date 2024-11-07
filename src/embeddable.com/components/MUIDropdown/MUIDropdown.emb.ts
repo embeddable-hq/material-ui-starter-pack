@@ -44,6 +44,7 @@ export const meta = {
     {
       name: 'defaultValue',
       type: 'string',
+      array: true,
       label: 'Default value',
       category: 'Pre-configured variables'
     },
@@ -51,13 +52,6 @@ export const meta = {
       name: 'placeholder',
       type: 'string',
       label: 'Placeholder',
-      category: 'Settings'
-    },
-    {
-      name: 'limit',
-      type: 'number',
-      label: 'Default number of options',
-      defaultValue: 100,
       category: 'Settings'
     }
   ],
@@ -98,8 +92,7 @@ export default defineComponent<Props, typeof meta>(Component, meta, {
       ...inputs,
       options: loadData({
         from: inputs.ds,
-        dimensions: inputs.property ? [inputs.property] : [],
-        limit: inputs.limit || 1000
+        dimensions: inputs.property ? [inputs.property] : []
       })
     };
   },
