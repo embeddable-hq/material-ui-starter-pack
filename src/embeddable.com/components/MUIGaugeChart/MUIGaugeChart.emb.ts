@@ -84,29 +84,6 @@ export const meta = {
       defaultValue: 360,
     },
   ],
-  /*
-  events: [
-    {
-      name: 'onChange',
-      label: 'Change',
-      properties: [
-        {
-          name: 'value',
-          type: 'string',
-        },
-      ],
-    },
-  ],
-  variables: [
-    {
-      name: 'Text Value',
-      type: 'string',
-      defaultValue: Value.noFilter(),
-      inputs: ['value'],
-      events: [{ name: 'onChange', property: 'value' }],
-    },
-  ],
-  */
 } as const satisfies EmbeddedComponentMeta;
 
 export default defineComponent(Component, meta, {
@@ -120,11 +97,4 @@ export default defineComponent(Component, meta, {
       }),
     };
   },
-  /*
-  events: {
-    onChange: (value) => {
-      return { value: value || Value.noFilter() };
-    },
-  },
-  */
 });
