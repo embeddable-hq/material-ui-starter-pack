@@ -56,9 +56,10 @@ export const meta = {
 
 export default defineComponent(Component, meta, {
   /* @ts-expect-error - to be fixed in @embeddable.com/react */
-  props: (inputs: Inputs<typeof meta>) => {
+  props: (inputs: Inputs<typeof meta>, [], clientContext) => {
     return {
       ...inputs,
+      ...clientContext,
     };
   },
   events: {

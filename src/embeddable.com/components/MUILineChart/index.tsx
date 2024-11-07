@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { LineChart } from "@mui/x-charts";
-import MUI from "../MUI";
+import React, { useState } from 'react';
+import { LineChart } from '@mui/x-charts';
+import MUI from '../MUI';
 import {
   DataResponse,
   Dataset,
   Dimension,
   Measure,
   TimeRange,
-} from "@embeddable.com/core";
-import Loading from "../util/Loading";
-import Error from "../util/Error";
-import ResizeListener from "../util/ResizeListener";
-import { Alert, Button } from "@mui/material";
+} from '@embeddable.com/core';
+import Loading from '../util/Loading';
+import Error from '../util/Error';
+import { Alert, Button, Paper } from '@mui/material';
+import { MUITheme } from '../types';
 
 type Props = {
   title: string;
@@ -23,6 +23,7 @@ type Props = {
   results: DataResponse;
   availablePeriod: TimeRange;
   showCut: boolean;
+  theme: MUITheme;
   onXAxisClick: (period: { from: Date; to: Date } | null) => void;
 };
 
@@ -37,9 +38,10 @@ export default (props: Props) => {
     onXAxisClick,
     availablePeriod,
     showCut,
+    theme,
   } = props;
 
-  const [cut, setCut] = useState<"beforeAxis" | "afterAxis">("beforeAxis");
+  const [cut, setCut] = useState<'beforeAxis' | 'afterAxis'>('beforeAxis');
   const [allowCut, setAllowCut] = useState(false);
 
   const { isLoading, data, error } = results;
@@ -66,7 +68,7 @@ export default (props: Props) => {
     .filter(
       (x) =>
         (!availablePeriod?.from || x[xAxis.name] >= availablePeriod.from) &&
-        (!availablePeriod?.to || x[xAxis.name] <= availablePeriod.to)
+        (!availablePeriod?.to || x[xAxis.name] <= availablePeriod.to),
     );
 
   const handleReset = () => {
@@ -75,7 +77,7 @@ export default (props: Props) => {
   const handleSetInterval = (param: any) => {
     const { axisValue } = param;
 
-    if (cut === "beforeAxis") {
+    if (cut === 'beforeAxis') {
       const lastDate =
         availablePeriod?.to ||
         (results?.data
@@ -85,7 +87,7 @@ export default (props: Props) => {
       setPointValue({ from: axisValue, to: lastDate } as any);
     }
 
-    if (cut === "afterAxis") {
+    if (cut === 'afterAxis') {
       const firstDate =
         availablePeriod?.from ||
         (results?.data ? new Date(results.data[0][xAxis.name]) : null);
@@ -93,72 +95,71 @@ export default (props: Props) => {
       setPointValue({ from: firstDate, to: axisValue } as any);
     }
 
-    setCut((prev) => (prev === "beforeAxis" ? "afterAxis" : "beforeAxis"));
+    setCut((prev) => (prev === 'beforeAxis' ? 'afterAxis' : 'beforeAxis'));
   };
   const setPointValue = (value: any) => {
     onXAxisClick(value);
   };
 
   return (
-    <MUI>
-      <h1 style={{ position: "absolute", top: -20, left: 50 }}>{title}</h1>
+    <MUI theme={theme}>
+      <Paper style={{ height: 'inherit', width: 'inherit' }}>
+        <h1 style={{ position: 'absolute', top: -20, left: 50 }}>{title}</h1>
 
-      {showCut && (
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 50,
-            color: "black",
-            background: "white",
-            border: "5px dashed black",
-            padding: 10,
-            borderRadius: 5,
-            zIndex: 1000,
-            display: "flex",
-            gap: 10,
-          }}
-        >
-          {allowCut && (
-            <Alert severity="info">
-              {allowCut
-                ? cut === "beforeAxis"
-                  ? "Click to remove previous data"
-                  : "Click to remove future data"
-                : null}
-            </Alert>
-          )}
-          {availablePeriod && (
-            <Button variant="outlined" onClick={handleReset}>
-              Reset
-            </Button>
-          )}
-          <Button
-            variant="contained"
-            onClick={() => setAllowCut((prev) => !prev)}
+        {showCut && (
+          <Paper
+            style={{
+              position: 'absolute',
+              top: 10,
+              right: 10,
+              padding: 10,
+              borderRadius: 5,
+              zIndex: 1000,
+              display: 'flex',
+              gap: 10,
+            }}
           >
-            {allowCut ? "Disable" : "Enable"} cut
-          </Button>
-        </div>
-      )}
-      <LineChart
-        onAxisClick={(e, param) => allowCut && handleSetInterval(param)}
-        xAxis={[
-          {
-            label: xAxis.title,
-            dataKey: xAxis.name,
-            valueFormatter: (value) => new Date(value).toLocaleDateString(),
-          },
-        ]}
-        series={yAxis.map((y) => ({
-          dataKey: y.name,
-          label: y.title,
-          valueFormatter: (value) => (value ? value?.toString() : ""),
-          area,
-        }))}
-        dataset={formatData}
-        grid={{ vertical: grid, horizontal: grid }}
-      />
+            {allowCut && (
+              <Alert severity="info">
+                {allowCut
+                  ? cut === 'beforeAxis'
+                    ? 'Click to remove previous data'
+                    : 'Click to remove future data'
+                  : null}
+              </Alert>
+            )}
+            {availablePeriod && (
+              <Button variant="outlined" onClick={handleReset}>
+                Reset
+              </Button>
+            )}
+            <Button
+              variant="contained"
+              onClick={() => setAllowCut((prev) => !prev)}
+            >
+              {allowCut ? 'Disable' : 'Enable'} cut
+            </Button>
+          </Paper>
+        )}
+        <LineChart
+          onAxisClick={(e, param) => allowCut && handleSetInterval(param)}
+          xAxis={[
+            {
+              label: xAxis.title,
+              dataKey: xAxis.name,
+              valueFormatter: (value) => new Date(value).toLocaleDateString(),
+            },
+          ]}
+          series={yAxis.map((y) => ({
+            dataKey: y.name,
+            label: y.title,
+            valueFormatter: (value) => (value ? value?.toString() : ''),
+            area,
+          }))}
+          dataset={formatData}
+          grid={{ vertical: grid, horizontal: grid }}
+        />
+      </Paper>
     </MUI>
   );
 };

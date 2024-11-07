@@ -1,38 +1,15 @@
-import React, { useState } from "react";
-import { LineChart } from "@mui/x-charts";
-import MUI from "../MUI";
-import {
-  DataResponse,
-  Dataset,
-  Dimension,
-  DimensionOrMeasure,
-  Granularity,
-  Measure,
-  Time,
-  TimeRange,
-} from "@embeddable.com/core";
-import Loading from "../util/Loading";
-import Error from "../util/Error";
-import ResizeListener from "../util/ResizeListener";
-import { DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/node/AdapterDayjs/AdapterDayjs.js";
-import dayjs from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { set } from "date-fns";
-
-function subtractOneMonth(date) {
-  const result = new Date(date);
-  result.setMonth(result.getMonth() - 1);
-  return result;
-}
-
-function addOneMonth(date) {
-  const result = new Date(date);
-  result.setMonth(result.getMonth() + 1);
-  return result;
-}
+import React, { useState } from 'react';
+import MUI from '../MUI';
+import { TimeRange } from '@embeddable.com/core';
+import { DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/node/AdapterDayjs/AdapterDayjs.js';
+import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { Paper } from '@mui/material';
+import { MUITheme } from '../types';
 
 export type Props = {
+  theme: MUITheme;
   value: TimeRange;
   onChange: (v: TimeRange | null) => void;
 };
@@ -43,7 +20,7 @@ export default (props: Props) => {
     from: undefined,
   } as TimeRange);
 
-  const { value, onChange } = props;
+  const { value, onChange, theme } = props;
 
   React.useEffect(() => {
     setNewPeriod({ to: value?.to, from: value?.from } as TimeRange);
@@ -81,32 +58,36 @@ export default (props: Props) => {
   };
 
   return (
-    <MUI>
+    <MUI theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <div
           style={{
-            display: "flex",
-            gap: "10px",
-            justifyContent: "center",
-            alignContent: "center",
+            display: 'flex',
+            gap: '10px',
+            justifyContent: 'center',
+            alignContent: 'center',
           }}
         >
-          <DatePicker
-            open={showStart}
-            onOpen={() => setShowStart(true)}
-            label="Start date"
-            value={value?.from ? dayjs(value?.from) : null}
-            onChange={handleStartDateChange}
-          />
-          <DatePicker
-            open={showEnd}
-            onOpen={() =>
-              newPeriod?.from ? setShowEnd(true) : setShowStart(true)
-            }
-            label="End date"
-            value={value?.to ? dayjs(value?.to) : null}
-            onChange={handleEndDateChange}
-          />
+          <Paper style={{ height: 'inherit', width: 'inherit' }}>
+            <DatePicker
+              open={showStart}
+              onOpen={() => setShowStart(true)}
+              label="Start date"
+              value={value?.from ? dayjs(value?.from) : null}
+              onChange={handleStartDateChange}
+            />
+          </Paper>
+          <Paper style={{ height: 'inherit', width: 'inherit' }}>
+            <DatePicker
+              open={showEnd}
+              onOpen={() =>
+                newPeriod?.from ? setShowEnd(true) : setShowStart(true)
+              }
+              label="End date"
+              value={value?.to ? dayjs(value?.to) : null}
+              onChange={handleEndDateChange}
+            />
+          </Paper>
         </div>
       </LocalizationProvider>
     </MUI>

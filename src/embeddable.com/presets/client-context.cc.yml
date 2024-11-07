@@ -1,0 +1,7 @@
+- name: Light
+  clientContext:
+    theme: light
+
+- name: Dark
+  clientContext:
+    theme: dark
