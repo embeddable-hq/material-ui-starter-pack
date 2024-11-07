@@ -5,7 +5,7 @@ import {
   Inputs,
 } from '@embeddable.com/react';
 
-import Component from './index';
+import Component, { Props } from './index';
 
 export const meta = {
   name: 'MUITable',
@@ -13,7 +13,7 @@ export const meta = {
   defaultHeight: 100,
   defaultWidth: 400,
   category: 'Material UI',
-  classNames: ['overflow-scroll'], //defined in global.css
+  classNames: ['overflow-scroll'],
   inputs: [
     {
       name: 'ds',
@@ -31,17 +31,35 @@ export const meta = {
       },
       category: 'Configure chart',
     },
+    {
+      name: 'pageSize',
+      type: 'number',
+      label: 'Rows per page',
+      defaultValue: 10,
+    },
   ],
 } as const satisfies EmbeddedComponentMeta;
 
-export default defineComponent(Component, meta, {
-  props: (inputs: Inputs<typeof meta>) => {
+type State = {
+  page: number;
+  pageSize: number;
+};
+
+export default defineComponent<Props, typeof meta, State>(Component, meta, {
+  props: (inputs: Inputs<typeof meta>, [state]) => {
+    const { ds, cols } = inputs;
+    const currentPage = state?.page || 0;
+    const currentPageSize = state?.pageSize || inputs.pageSize || 10;
+
     return {
       ...inputs,
+      pageSize: currentPageSize,
       results: loadData({
         from: inputs.ds,
         dimensions: inputs.cols.filter((c) => isDimension(c)),
         measures: inputs.cols.filter((c) => isMeasure(c)),
+        limit: currentPageSize,
+        offset: currentPageSize * currentPage,
       }),
     };
   },
