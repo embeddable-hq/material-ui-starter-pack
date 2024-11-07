@@ -1,8 +1,11 @@
-import { EmbeddedComponentMeta, defineComponent } from '@embeddable.com/react';
+import { isDimension, isMeasure, loadData } from '@embeddable.com/core';
+import {
+  defineComponent,
+  EmbeddedComponentMeta,
+  Inputs,
+} from '@embeddable.com/react';
 
 import Component from './index';
-import { Inputs } from '@embeddable.com/react';
-import { isDimension, isMeasure, loadData } from '@embeddable.com/core';
 
 export const meta = {
   name: 'MUITable',
@@ -16,7 +19,7 @@ export const meta = {
       name: 'ds',
       type: 'dataset',
       label: 'Dataset to display',
-      category: 'Configure chart'
+      category: 'Configure chart',
     },
     {
       name: 'cols',
@@ -24,11 +27,11 @@ export const meta = {
       array: true,
       label: 'Columns',
       config: {
-        dataset: 'ds'
+        dataset: 'ds',
       },
-      category: 'Configure chart'
+      category: 'Configure chart',
     },
-  ]
+  ],
 } as const satisfies EmbeddedComponentMeta;
 
 export default defineComponent(Component, meta, {
@@ -37,9 +40,9 @@ export default defineComponent(Component, meta, {
       ...inputs,
       results: loadData({
         from: inputs.ds,
-        dimensions: inputs.cols.filter(c => isDimension(c)),
-        measures: inputs.cols.filter(c => isMeasure(c))
-      })
+        dimensions: inputs.cols.filter((c) => isDimension(c)),
+        measures: inputs.cols.filter((c) => isMeasure(c)),
+      }),
     };
-  }
+  },
 });
