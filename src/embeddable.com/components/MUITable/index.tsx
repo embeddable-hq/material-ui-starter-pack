@@ -167,7 +167,7 @@ export default function MUITable({
             slotProps={{
               select: {
                 MenuProps: {
-                  container: paginationRef.current,
+                  container: containerRef.current,
                   anchorOrigin: {
                     vertical: "bottom",
                     horizontal: "left",
