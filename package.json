@@ -17,7 +17,7 @@
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@fontsource/roboto": "^5.1.0",
-    "@mui/material": "^6.1.1",
+    "@mui/material": "^6.1.6",
     "@mui/x-charts": "^7.22.1",
     "@mui/x-date-pickers": "^7.22.1",
     "@rollup/rollup-darwin-x64": "^4.24.4",
