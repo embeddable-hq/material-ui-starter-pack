@@ -50,6 +50,7 @@ export default (props: Props) => {
                     onChange(newValue);
                 }}
                 sx={{width: props.minDropdownWidth}}
+                getOptionLabel={(option) => Array.isArray(option) ? option[0] : option}
                 options={optionList}
                 renderInput={(params) => <TextField {...params} label={placeHolder}/>}
             />
