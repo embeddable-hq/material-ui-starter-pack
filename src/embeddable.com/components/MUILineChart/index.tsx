@@ -11,7 +11,7 @@ import {
 import Loading from "../util/Loading";
 import Error from "../util/Error";
 import ResizeListener from "../util/ResizeListener";
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 
 type Props = {
   title: string;
@@ -111,8 +111,9 @@ export default (props: Props) => {
               position: "absolute",
               top: 0,
               right: 50,
-              color: "white",
-              background: "grey",
+              color: "black",
+              background: "white",
+              border: "5px dashed black",
               padding: 10,
               borderRadius: 5,
               zIndex: 1000,
@@ -120,15 +121,26 @@ export default (props: Props) => {
               gap: 10,
             }}
           >
-            <Button onClick={() => setAllowCut((prev) => !prev)}>
+            {allowCut && (
+              <Alert severity="info">
+                {allowCut
+                  ? cut === "beforeAxis"
+                    ? "Click to remove previous data"
+                    : "Click to remove future data"
+                  : null}
+              </Alert>
+            )}
+            {availablePeriod && (
+              <Button variant="outlined" onClick={handleReset}>
+                Reset
+              </Button>
+            )}
+            <Button
+              variant="contained"
+              onClick={() => setAllowCut((prev) => !prev)}
+            >
               {allowCut ? "Disable" : "Enable"} cut
             </Button>
-            {allowCut
-              ? cut === "beforeAxis"
-                ? "click axis to remove what is before <-"
-                : "click axis to remove what is after ->"
-              : null}
-            {availablePeriod && <Button onClick={handleReset}>Reset</Button>}
           </div>
         )}
         <LineChart

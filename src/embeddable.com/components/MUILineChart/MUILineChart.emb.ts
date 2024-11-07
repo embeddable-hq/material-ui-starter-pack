@@ -108,7 +108,7 @@ export default defineComponent(Component, meta, {
         from: inputs.ds,
         timeDimensions: [
           {
-            dimension: inputs.xAxis?.name || '',
+            dimension: inputs.xAxis?.name || "",
             granularity: inputs.granularity,
           },
         ],
@@ -119,7 +119,8 @@ export default defineComponent(Component, meta, {
   events: {
     onXAxisClick: (v) => {
       if (!v) return { value: Value.noFilter() };
+      console.log(v);
       return { value: v };
     },
-  }
+  },
 });
