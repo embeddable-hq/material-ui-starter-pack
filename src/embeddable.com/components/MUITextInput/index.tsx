@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import { OverridableStringUnion } from '@mui/types';
-import MUI from '../MUI';
 import {
+  Box,
   TextField,
   TextFieldPropsSizeOverrides,
   TextFieldVariants,
 } from '@mui/material';
+
+import MUI from '../MUI';
 import ResizeListener from '../util/ResizeListener';
+import { MUITheme } from '../types';
 
 interface Props {
   fullWidth?: boolean;
@@ -16,6 +20,7 @@ interface Props {
   size?:
     | OverridableStringUnion<'small' | 'medium', TextFieldPropsSizeOverrides>
     | undefined;
+  theme?: MUITheme;
   title?: string;
   value?: string;
   variant?: TextFieldVariants;
@@ -24,7 +29,8 @@ interface Props {
 let timeout: number | null = null;
 
 const Component: React.FC<Props> = (props: Props) => {
-  const { fullWidth, helperText, multiline, size, title, variant } = props;
+  const { fullWidth, helperText, multiline, size, theme, title, variant } =
+    props;
   const ref = useRef<HTMLInputElement | null>(null);
   const [value, setValue] = useState<string>(props.value || '');
   const [rowsVal, setRowsVal] = useState<number>(1);
@@ -51,20 +57,22 @@ const Component: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <MUI>
+    <MUI theme={theme}>
       <ResizeListener onResize={handleRowSize} debounce={300}>
-        <TextField
-          fullWidth={fullWidth}
-          helperText={helperText}
-          label={title}
-          multiline={multiline}
-          onChange={handleChange}
-          ref={ref}
-          rows={rowsVal}
-          size={size}
-          variant={variant || undefined}
-          value={value}
-        />
+        <Box>
+          <TextField
+            fullWidth={fullWidth}
+            helperText={helperText}
+            label={title}
+            multiline={multiline}
+            onChange={handleChange}
+            ref={ref}
+            rows={rowsVal}
+            size={size}
+            variant={variant || undefined}
+            value={value}
+          />
+        </Box>
       </ResizeListener>
     </MUI>
   );
