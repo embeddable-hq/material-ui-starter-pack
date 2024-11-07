@@ -2,7 +2,7 @@ import { EmbeddedComponentMeta, defineComponent } from '@embeddable.com/react';
 
 import Component from './index';
 import { Inputs } from '@embeddable.com/react';
-import { loadData, Value } from "@embeddable.com/core";
+import { Value } from "@embeddable.com/core";
 
 export const meta = {
   name: 'MUISlider',
@@ -10,7 +10,7 @@ export const meta = {
   defaultHeight: 75,
   defaultWidth: 400,
   category: 'Material UI',
-  classNames: ['overflow-scroll'], //defined in global.css
+  classNames: ['margin-top-20'], //defined in global.css
   inputs: [
     {
       name: 'value',

@@ -10,7 +10,6 @@ export const meta = {
   defaultHeight: 100,
   defaultWidth: 400,
   category: 'Material UI',
-  classNames: ['overflow-scroll'], //defined in global.css
   inputs: [
     {
       name: 'ds',
