@@ -25,7 +25,6 @@ const mapDataResponseToSeries = (responseData: Array<any>, slice: Dimension, met
 export default (props: Props) => {
   const { slice, metric, results, showLegend, onItemClick, innerRadius } = props;
   const { isLoading, data, error } = results;
-  console.log("innerRadius:" + innerRadius)
   if (isLoading) {
     return <Loading/>
   }
