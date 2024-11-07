@@ -46,8 +46,10 @@ const Component: React.FC<Props> = (props: Props) => {
   };
 
   const handleRowSize = (w: number, h: number) => {
-    // If you want dynamic width, set fullwidth to true
-    setRowsVal(Math.max(h / 22) - 3);
+    // Adjusts height of multi-line textbox on resize
+    // (If you want dynamic width, set fullWidth to true)
+    let heightMod = helperText ? 1 : 0;
+    setRowsVal(Math.ceil(h / 23) - 3 - heightMod);
   };
 
   return (
