@@ -1,6 +1,8 @@
 import React from "react";
 import MUI from "../MUI";
 import { Slider } from "@mui/material";
+import {OverridableStringUnion} from "@mui/types";
+import {SliderPropsSizeOverrides} from "@mui/material/Slider/Slider";
 
 type Props = {
   onChange: (event: any) => void;
@@ -11,12 +13,13 @@ type Props = {
   enabled: boolean;
   marks: boolean;
   valueLabelDisplay: boolean;
+  size?: OverridableStringUnion<'small' | 'medium', SliderPropsSizeOverrides>;
 };
 
 let timeout: number | null = null;
 
 export default (props: Props) => {
-  const { onChange, step, min, max, enabled, marks, valueLabelDisplay } = props;
+  const { onChange, step, min, max, enabled, marks, valueLabelDisplay, size } = props;
   const [value, setValue] = React.useState(props.value);
 
   React.useEffect(() => {
@@ -43,7 +46,7 @@ export default (props: Props) => {
         step={step}
         min={min}
         max={max}
-        size={"small"}
+        size={size}
         onChange={handleChange}
       />
     </MUI>

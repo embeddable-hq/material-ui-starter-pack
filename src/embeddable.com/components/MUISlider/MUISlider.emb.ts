@@ -3,6 +3,7 @@ import { EmbeddedComponentMeta, defineComponent } from '@embeddable.com/react';
 import Component from './index';
 import { Inputs } from '@embeddable.com/react';
 import { Value } from "@embeddable.com/core";
+import MUISize from "../../../types/MUISize.type.emb";
 
 export const meta = {
   name: 'MUISlider',
@@ -60,6 +61,14 @@ export const meta = {
       category: 'Slider settings',
       defaultValue: false
     },
+    {
+      name: 'size',
+      type: MUISize as never,
+      defaultValue: 'small',
+      label: 'Size',
+      description: 'Size of the slider field',
+      category: 'Slider settings',
+    }
   ],
   events: [
     {
