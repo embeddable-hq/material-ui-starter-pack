@@ -43,14 +43,6 @@ export const meta = {
       defaultValue: 10,
       category: "Pagination",
     },
-    {
-      name: "pageSizeOptions",
-      type: "number",
-      array: true,
-      label: "Page size options",
-      defaultValue: [5, 10, 25, 50],
-      category: "Pagination",
-    },
   ],
 } as const satisfies EmbeddedComponentMeta;
 

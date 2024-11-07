@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -10,6 +10,7 @@ import {
   TablePagination,
   CircularProgress,
   Box,
+  TextField,
 } from "@mui/material";
 import {
   DataResponse,
@@ -26,7 +27,6 @@ export type Props = {
   cols: DimensionOrMeasure[];
   results: DataResponse;
   pageSize: number;
-  pageSizeOptions: number[];
   onPageSizeChange?: (newPageSize: number) => void;
 };
 
@@ -36,10 +36,8 @@ type PaginationState = {
 };
 
 export default function MUITable({
-  cols,
   results,
   pageSize,
-  pageSizeOptions,
   onPageSizeChange,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -54,6 +52,23 @@ export default function MUITable({
     PaginationState,
     (f: (state: PaginationState) => PaginationState) => void,
   ];
+
+  const [inputPageSize, setInputPageSize] = useState(pageSize);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (inputPageSize > 0) {
+        setPaginationState((state) => ({
+          ...state,
+          page: 0,
+          pageSize: inputPageSize,
+        }));
+        onPageSizeChange?.(inputPageSize);
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [inputPageSize, onPageSizeChange]);
 
   if (error) {
     return <Error msg={error} />;
@@ -150,67 +165,91 @@ export default function MUITable({
               </TableBody>
             </Table>
           </TableContainer>
-          <TablePagination
-            ref={paginationRef}
-            component="div"
-            count={-1}
-            page={paginationState?.page ?? 0}
-            onPageChange={handleChangePage}
-            rowsPerPage={paginationState?.pageSize ?? pageSize}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            rowsPerPageOptions={pageSizeOptions}
+          <Box
             sx={{
-              flexShrink: 0,
+              display: "flex",
+              alignItems: "center",
+              padding: "0 16px",
               borderTop: "1px solid rgba(224, 224, 224, 1)",
-              position: "relative",
+              minHeight: "52px",
             }}
-            slotProps={{
-              select: {
-                MenuProps: {
-                  container: containerRef.current,
-                  anchorOrigin: {
-                    vertical: "bottom",
-                    horizontal: "left",
+          >
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <TextField
+                type="number"
+                size="small"
+                value={inputPageSize}
+                onChange={(e) => {
+                  const value = parseInt(e.target.value, 10);
+                  if (value > 0) {
+                    setInputPageSize(value);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                    e.preventDefault();
+                    const delta = e.key === "ArrowUp" ? 10 : -10;
+                    const newValue = Math.max(10, inputPageSize + delta);
+                    setInputPageSize(newValue);
+                  }
+                }}
+                sx={{
+                  width: "50px",
+                  marginRight: 1,
+                  "& input": {
+                    textAlign: "right",
+                    padding: "2px 4px",
+                    fontSize: "0.875rem",
                   },
-                  transformOrigin: {
-                    vertical: "top",
-                    horizontal: "left",
+                  "& .MuiOutlinedInput-root": {
+                    height: "28px",
                   },
-                  PaperProps: {
-                    style: {
-                      marginTop: "2px",
-                      minWidth: "80px",
-                      position: "absolute",
-                      zIndex: 1300,
+                }}
+                slotProps={{
+                  input: {
+                    inputProps: {
+                      min: 10,
+                      style: { paddingTop: 0, paddingBottom: 0 },
                     },
                   },
-                  sx: {
-                    "& .MuiMenu-list": {
-                      padding: "4px 0",
-                    },
-                    "& .MuiPopover-root": {
-                      position: "absolute !important",
-                      left: "unset !important",
-                      top: "unset !important",
-                    },
-                    "& .MuiMenu-paper": {
-                      top: "100% !important",
+                }}
+              />
+              <span style={{ fontSize: "0.875rem" }}>Rows per page</span>
+            </Box>
+
+            <Box
+              sx={{ marginLeft: "auto", display: "flex", alignItems: "center" }}
+            >
+              <TablePagination
+                ref={paginationRef}
+                component="div"
+                count={-1}
+                page={paginationState?.page ?? 0}
+                onPageChange={handleChangePage}
+                rowsPerPage={paginationState?.pageSize ?? pageSize}
+                rowsPerPageOptions={[]}
+                labelRowsPerPage=""
+                sx={{
+                  flexShrink: 0,
+                  position: "relative",
+                  ".MuiTablePagination-spacer": { display: "none" },
+                  ".MuiTablePagination-selectLabel": { display: "none" },
+                  ".MuiTablePagination-select": { display: "none" },
+                  ".MuiTablePagination-selectIcon": { display: "none" },
+                }}
+                slotProps={{
+                  actions: {
+                    nextButton: {
+                      disabled:
+                        isLoading ||
+                        (data?.length ?? 0) <
+                          (paginationState?.pageSize ?? pageSize),
                     },
                   },
-                  disablePortal: true,
-                  keepMounted: false,
-                },
-              },
-              actions: {
-                nextButton: {
-                  disabled:
-                    isLoading ||
-                    (data?.length ?? 0) <
-                      (paginationState?.pageSize ?? pageSize),
-                },
-              },
-            }}
-          />
+                }}
+              />
+            </Box>
+          </Box>
         </Box>
       </ResizeListener>
     </MUI>
