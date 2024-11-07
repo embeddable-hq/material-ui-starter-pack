@@ -5,16 +5,18 @@ import { Slider } from "@mui/material";
 type Props = {
   onChange: (event: any) => void;
   value: number;
-  size: string;
   step: number;
   min: number;
-  max: number
+  max: number;
+  enabled: boolean;
+  marks: boolean;
+  valueLabelDisplay: boolean;
 };
 
 let timeout: number | null = null;
 
 export default (props: Props) => {
-  const { onChange, size, step, min, max } = props;
+  const { onChange, step, min, max, enabled, marks, valueLabelDisplay } = props;
   const [value, setValue] = React.useState(props.value);
 
   React.useEffect(() => {
@@ -34,11 +36,14 @@ export default (props: Props) => {
   return (
     <MUI>
       <Slider
+        disabled={!enabled}
+        marks={marks}
+        valueLabelDisplay={valueLabelDisplay ? "auto" : "off"}
         value={value}
         step={step}
         min={min}
         max={max}
-        size={"medium"}
+        size={"small"}
         onChange={handleChange}
       />
     </MUI>

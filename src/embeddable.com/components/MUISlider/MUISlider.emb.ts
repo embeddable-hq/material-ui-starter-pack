@@ -2,22 +2,16 @@ import { EmbeddedComponentMeta, defineComponent } from '@embeddable.com/react';
 
 import Component from './index';
 import { Inputs } from '@embeddable.com/react';
-import { loadData } from "@embeddable.com/core";
+import { loadData, Value } from "@embeddable.com/core";
 
 export const meta = {
   name: 'MUISlider',
   label: 'Slider',
-  defaultHeight: 100,
+  defaultHeight: 75,
   defaultWidth: 400,
   category: 'Material UI',
   classNames: ['overflow-scroll'], //defined in global.css
   inputs: [
-    {
-      name: 'size',
-      type: 'string',
-      label: 'Size',
-      category: 'Slider settings'
-    },
     {
       name: 'value',
       type: 'number',
@@ -28,19 +22,43 @@ export const meta = {
       name: 'step',
       type: 'number',
       label: 'Step',
-      category: 'Slider settings'
+      category: 'Slider settings',
+      defaultValue: 1
     },
     {
       name: 'min',
       type: 'number',
       label: 'Min',
-      category: 'Slider settings'
+      category: 'Slider settings',
+      defaultValue: 0
     },
     {
       name: 'max',
       type: 'number',
       label: 'Max',
-      category: 'Slider settings'
+      category: 'Slider settings',
+      defaultValue: 100
+    },
+    {
+      name: 'enabled',
+      type: 'boolean',
+      label: 'Enabled',
+      category: 'Slider settings',
+      defaultValue: true
+    },
+    {
+      name: 'marks',
+      type: 'boolean',
+      label: 'Show marks',
+      category: 'Slider settings',
+      defaultValue: false
+    },
+    {
+      name: 'valueLabelDisplay',
+      type: 'boolean',
+      label: 'Show label values',
+      category: 'Slider settings',
+      defaultValue: false
     },
   ],
   events: [
@@ -53,6 +71,15 @@ export const meta = {
           type: "number"
         }
       ]
+    }
+  ],
+  variables: [
+    {
+      name: 'Slider Value',
+      type: 'number',
+      defaultValue: Value.noFilter(),
+      inputs: ['value'],
+      events: [{ name: 'onChange', property: 'value' }]
     }
   ]
 } as const satisfies EmbeddedComponentMeta;
