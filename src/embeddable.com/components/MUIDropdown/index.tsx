@@ -45,6 +45,7 @@ export default (props: Props) => {
                 autoComplete
                 readOnly={optionList.length === 0}
                 disableClearable={props.clearable === false}
+                value={props.defaultValue || []}
                 onChange={(_: any, newValue: string | null) => {
                     onChange(newValue);
                 }}
