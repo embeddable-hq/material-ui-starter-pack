@@ -116,10 +116,5 @@ export default defineComponent(Component, meta, {
       console.log("onClick2", { value: v });
       return { value: v };
     },
-  },
-  // events: {
-  //   onPeriodChange: (v) => {
-  //     return { value: v };
-  //   },
-  // },
+  }
 });
