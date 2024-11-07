@@ -35,10 +35,5 @@
     "@embeddable.com/sdk-core": "3.9.7",
     "@embeddable.com/sdk-react": "3.8.2",
     "cross-env": "^7.0.3"
-  },
-  "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.22.4",
-    "@rollup/rollup-win32-x64-msvc": "4.24.4",
-    "@rollup/rollup-darwin-arm64": "4.24.4"
   }
 }
