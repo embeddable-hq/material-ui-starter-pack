@@ -87,9 +87,10 @@ export const meta = {
 } as const satisfies EmbeddedComponentMeta;
 
 export default defineComponent(Component, meta, {
-  props: (inputs: Inputs<typeof meta>) => {
+  props: (inputs: Inputs<typeof meta>, [], clientContext) => {
     return {
       ...inputs,
+      ...clientContext,
       results: loadData({
         from: inputs.ds,
         dimensions: inputs.cols.filter((c) => isDimension(c)),
